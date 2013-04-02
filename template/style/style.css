@@ -22,11 +22,6 @@
    padding: 0;
 }
 
-.clear
-{
-   clear: both;
-}
-
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
 {
    display: block;
@@ -43,6 +38,11 @@ body
    font-size: 100%;
    color: rgb(43, 55, 61);
    background-color: rgb(247, 247, 247);
+}
+
+.clear
+{
+   clear: both;
 }
 
 h1
@@ -83,7 +83,7 @@ p
 {
    font-size: 1em;
    line-height: 1.4em;
-   color: #444;
+   color: rgb(68, 68, 68);
    margin-bottom: 0.4em;
 }
 
@@ -99,44 +99,28 @@ abbr
   text-transform: lowercase;
   font-weight: 600;
   letter-spacing: 0.1em;
+  word-spacing: 0em;
 }
 
 a
 {
    text-decoration: none;
+   color: rgb(23, 29, 33);
+   padding: 0 3px;
 }
 
-.hidden
+a:hover
 {
-   display: block;
-   opacity: 0;
+   text-decoration: none;
+   color: rgb(68, 68, 68);
+   background-color: rgb(229, 229, 229);
 }
 
-.search-form input
-{
-   font-size: 1em;
-   background: url("../images/icon_search.png") no-repeat scroll right center #FFFFFF;
-   border-color: #BCBCB4 #E1E1DE #E1E1DE #BCBCB4;
-   border-style: solid;
-   border-width: 1px;
-   padding: 0.2em;
-   width: calc(100% - 0.4em);
-   font-family: inherit;
-}
-
-.search-form .searching
-{
-   background: url("../images/spinner.gif") no-repeat scroll left center transparent;
-   padding-left: 20px;
-}
-
-.search-form .msg
-{
-   font-size: 0.7em;
-   color: #707065;
-   margin: 0.4em 0 0 0.6em;
-   position: absolute;
-}
+/*
+ *
+ * General Page
+ *
+ */
 
 #page
 {
@@ -145,10 +129,9 @@ a
 
 #header
 {
-   width: 99%;
+   width: 98%;
    height: 41px;
-   margin-right: 1%;
-   margin-top: 7px;
+   margin: 7px 1%;
    background-image: url("../images/bg_double.png");
    background-repeat: repeat-x;
    background-position: center 1em;
@@ -156,14 +139,13 @@ a
 
 h1.sitetitle
 {
-  font-size: 2.25em;
-  line-height: 1.13888889em;
-  font-weight: 900;
-  display: inline-block;
-  background-color: rgb(247, 247, 247);
-  padding-right: 14px;
-  padding-left: 10px;
-  margin-bottom: 0;
+   margin: 0;
+   padding: 0 14px 0 0;
+   font-size: 2.25em;
+   font-weight: 900;
+   line-height: 1.13888889em;
+   display: inline-block;
+   background-color: rgb(247, 247, 247);
 }
 
 #sidebar
@@ -171,13 +153,39 @@ h1.sitetitle
    width: 190px;
    position: fixed;
    top: 56px;
+   left: 1%;
    z-index: 20;
 }
 
 #sidebar .widget
 {
-   margin-left: 10px;
-   padding: 7px 5px 7px 0;
+   padding: 7px 0;
+}
+
+#sidebar .widget .search-form input
+{
+   font-size: 1em;
+   background: url("../images/icon_search.png") no-repeat scroll right center rgb(255, 255, 255);
+   border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+   border-style: solid;
+   border-width: 1px;
+   padding: 0.2em;
+   width: calc(100% - 0.4em);
+   font-family: inherit;
+}
+
+#sidebar .widget .search-form .searching
+{
+   background: url("../images/spinner.gif") no-repeat scroll left center transparent;
+   padding-left: 20px;
+}
+
+#sidebar .widget .search-form .msg
+{
+   font-size: 0.7em;
+   color: #707065;
+   margin: 0.4em 0 0 0.6em;
+   position: absolute;
 }
 
 #main-nav
@@ -289,31 +297,66 @@ h1.sitetitle
 
 #content
 {
-   width: calc(98% - 220px);
-   padding-top: 15px;
-   padding-left: 220px;
+   width: calc(95% - 190px);
+   padding-top: 10px;
+   padding-left: calc(190px + 3%);
    margin-right: 2%;
    display: block;
 }
 
 #content .post
 {
-   float: left;
-   margin-bottom: 20px;
-   margin-left: 3%;
-   width: 31.3333%;
+   width: 22.75%;
    clear: none;
+   margin-bottom: 20px;
+   margin-right: 3%;
+   padding-bottom: 10px;
+   float: left;
    text-align: justify;
+   border-bottom: 1px dotted #BCBCB4;
 }
 
-#content .post:nth-of-type(3n+1)
+#content .post:nth-of-type(4n+1)
 {
    clear: left;
-   margin-left: 0;
+}
+
+#content .post:nth-of-type(4n)
+{
+   margin-right: 0;
+}
+
+/* 3 reading column */
+@media screen and (max-width: 1200px)
+{
+   #content .post
+   {
+      width: 31.333333%;
+   }
+
+   #content .post:nth-of-type(4n+1)
+   {
+      clear: none;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(4n)
+   {
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(3n+1)
+   {
+      clear: left;
+   }
+
+   #content .post:nth-of-type(3n)
+   {
+      margin-right: 0;
+   }
 }
 
 /* 2 reading column */
-
 @media screen and (max-width: 1000px)
 {
    #content .post
@@ -321,16 +364,36 @@ h1.sitetitle
       width: 48.5%;
    }
 
+   #content .post:nth-of-type(4n+1)
+   {
+      clear: none;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(4n)
+   {
+      margin-right: 3%;
+   }
+
    #content .post:nth-of-type(3n+1)
    {
       clear: none;
-      margin-left: 3%;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(3n)
+   {
+      margin-right: 3%;
    }
 
    #content .post:nth-of-type(2n+1)
    {
       clear: left;
-      margin-left: 0;
+   }
+
+   #content .post:nth-of-type(2n)
+   {
+      margin-right: 0;
    }
 }
 
@@ -341,7 +404,7 @@ h1.sitetitle
    {
       width: 100%;
       clear: left;
-      margin-left: 0;
+      margin-right: 0;
    }
 }
 
@@ -370,19 +433,39 @@ h1.sitetitle
    {
       width: 48.5%;
       clear: none;
-      margin-left: 3%;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(4n+1)
+   {
+      clear: none;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(4n)
+   {
+      margin-right: 3%;
    }
 
    #content .post:nth-of-type(3n+1)
    {
       clear: none;
-      margin-left: 3%;
+      margin-right: 3%;
+   }
+
+   #content .post:nth-of-type(3n)
+   {
+      margin-right: 3%;
    }
 
    #content .post:nth-of-type(2n+1)
    {
       clear: left;
-      margin-left: 0;
+   }
+
+   #content .post:nth-of-type(2n)
+   {
+      margin-right: 0;
    }
 
    #sidebar .widget
@@ -414,20 +497,28 @@ h1.sitetitle
    }
 }
 
-/* header on top and 1 column */
+/* header on top and 1 column
+ *
+ * iPhone landscape
+*/
 @media screen and (max-width: 480px)
 {
+   html
+   {
+      -webkit-text-size-adjust: 100%;
+   }
+
    #sidebar
    {
       position: relative;
-
    }
 
    #content
    {
-      width: 98%;
-      padding-top: 0;
-      padding-left: 0;
+      width: 96%;
+      padding: 0;
+      margin-top: 10px;
+      margin-left: 2%;
       margin-right: 2%;
    }
 
