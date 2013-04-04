@@ -99,7 +99,6 @@ abbr
   text-transform: lowercase;
   font-weight: 600;
   letter-spacing: 0.1em;
-  word-spacing: 0em;
 }
 
 a
@@ -159,38 +158,29 @@ h1.sitetitle
 
 #sidebar .widget
 {
+   width: 190px;
    padding: 7px 0;
 }
 
 #sidebar .widget .search-form input
 {
+   padding: 0.2em;
+   font-family: inherit;
    font-size: 1em;
    background: url("../images/icon_search.png") no-repeat scroll right center rgb(255, 255, 255);
    border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
    border-style: solid;
    border-width: 1px;
-   padding: 0.2em;
-   width: calc(100% - 0.4em);
-   font-family: inherit;
 }
 
 #sidebar .widget .search-form .searching
 {
-   background: url("../images/spinner.gif") no-repeat scroll left center transparent;
    padding-left: 20px;
-}
-
-#sidebar .widget .search-form .msg
-{
-   font-size: 0.7em;
-   color: #707065;
-   margin: 0.4em 0 0 0.6em;
-   position: absolute;
+   background: url("../images/spinner.gif") no-repeat scroll left center transparent;
 }
 
 #main-nav
 {
-   background-image: none;
    border-top: 1px solid #E2DDD6;
    margin-top: 0;
 }
@@ -202,15 +192,15 @@ h1.sitetitle
 
 #main-nav ul.navigation li.nav-item
 {
-   border-bottom: 1px solid #E2DDD6;
    padding-left: 12px;
+   border-bottom: 1px solid #E2DDD6;
 }
 
 #main-nav ul.navigation li.nav-item a
 {
+   padding: 0.8em 0.1em;
    color: #707065;
    display: block;
-   padding: 0.8em 0.1em;
 }
 
 #main-nav ul.navigation li.nav-item a:hover,
@@ -218,6 +208,7 @@ h1.sitetitle
 {
    color: #444444;
    border-color: #444444;
+   background-color: rgb(247, 247, 247);
 }
 
 #main-nav ul.navigation li.nav-item ul.tag-list
@@ -232,7 +223,7 @@ h1.sitetitle
 
 #main-nav ul.navigation li.nav-item ul.tag-list li.tag a
 {
-   color: #707065;
+   color: rgb(112, 112, 101);
    display: block;
    padding: 0.05em 0.2em;
    font-size: 0.9em;

@@ -18,6 +18,9 @@
    // include needed files
    require_once 'core/config.php';
    require_once 'core/benchmark.php';
+   require_once 'core/mysql.php';
+   require_once 'core/cookie.php';
+   require_once 'core/session.php';
 
    /*
     * Start the timer...
