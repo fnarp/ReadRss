@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+@font-face
+{
+   font-family: 'Crimson Text';
+   font-style: normal;
+   font-weight: 400;
+   src: local('Crimson Text'), local('CrimsonText-Roman'), url(http://themes.googleusercontent.com/static/fonts/crimsontext/v3/3IFMwfRa07i-auYR-B-zNaRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+
+@font-face
+{
+   font-family: 'Crimson Text';
+   font-style: normal;
+   font-weight: 600;
+   src: local('Crimson Text Semibold'), local('CrimsonText-Semibold'), url(http://themes.googleusercontent.com/static/fonts/crimsontext/v3/rEy5tGc5HdXy56Xvd4f3IxefZI2gqg-NXpw43Z_DJ3I.woff) format('woff');
+}
+
+*
+{
+   margin: 0;
+   padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
+{
+   display: block;
+}
+
+html
+{
+   height: 100%;
+}
+
+body
+{
+   font-family: "Crimson Text", "Helvetica", "Georgia";
+   font-size: 100%;
+   color: rgb(43, 55, 61);
+   background-color: rgb(247, 247, 247);
+}
+
+.clear
+{
+   clear: both;
+}
+
+h1
+{
+   font-size: 1.4625em;
+   font-weight: 600;
+   color: rgb(68, 68, 68);
+   line-height: 1.1em;
+   text-align: left;
+   margin-bottom: 0.3em;
+}
+
+h2
+{
+   font-size: 1.375em;
+   color: rgb(68, 68, 68);
+}
+
+/*
+ *
+ * General Page
+ *
+ */
+
+#page
+{
+   width: 100%;
+}
+
+#header
+{
+   width: 98%;
+   height: 41px;
+   margin: 7px 1%;
+   background-image: url("../images/bg_double.png");
+   background-repeat: repeat-x;
+   background-position: center 1em;
+}
+
+h1.sitetitle
+{
+   margin: 0;
+   padding: 0 14px 0 0;
+   font-size: 2.25em;
+   font-weight: 900;
+   line-height: 1.13888889em;
+   display: inline-block;
+   background-color: rgb(247, 247, 247);
+}
+
+.loginbox
+{
+width: 250px; height:120px; text-align:center; margin:calc(25% - 241px) auto;
+}
+
+ input {
+    border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+    border-style: solid;
+    border-width: 1px;
+    font-family: inherit;
+    font-size: 1em;
+    padding: 0.2em;
+    margin: 0.2em;
+    width: 230px;
+    }
+    
+     input[type="submit"] {
+    border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+    border-style: solid;
+    border-width: 1px;
+    font-family: inherit;
+    font-size: 1em;
+    padding: 0.2em;
+    margin: 0.2em;
+    width: 100px;
+    }
