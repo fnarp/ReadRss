@@ -91,7 +91,7 @@
             return true;
          }
 
-         ErrorHandler::report(ErrorHandler::UNRECOVERABLE, ERROR_CREATING_SESSION, __FILE__, __LINE__);
+         Error::newError(ErrorHandler::UNRECOVERABLE, 1001, ERROR_CREATING_SESSION);
 
          return false;
       }
@@ -125,7 +125,7 @@
             return true;
          }
 
-         ErrorHandler::report(ErrorHandler::UNRECOVERABLE, ERROR_SAVE_SESSION, __FILE__, __LINE__);
+         Error::newError(ErrorHandler::UNRECOVERABLE, 1002, ERROR_SAVE_SESSION);
 
          return false;
       }
@@ -157,7 +157,7 @@
 
                if(!$this->m_database->executeUpdate(true))
                {
-                  ErrorHandler::report(ErrorHandler::ERROR, ERROR_UPDATE_SESSION, __FILE__, __LINE__);
+                  Error::newError(ErrorHandler::UNRECOVERABLE, 1003, ERROR_UPDATE_SESSION);
                }
 
                $this->sessionId = $sessionId;
@@ -196,7 +196,7 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            ErrorHandler::report(ErrorHandler::ERROR, ERROR_SAVE_SESSION, __FILE__, __LINE__);
+            Error::newError(ErrorHandler::UNRECOVERABLE, 1004, ERROR_SAVE_SESSION);
          }
       }
 
@@ -309,7 +309,7 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            ErrorHandler::report(ErrorHandler::WARNING, ERROR_SET_SESSION_OWNER, __FILE__, __LINE__);
+            Error::newError(ErrorHandler::UNRECOVERABLE, 1005, ERROR_SET_SESSION_OWNER);
          }
       }
    }

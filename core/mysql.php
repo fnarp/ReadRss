@@ -95,12 +95,8 @@
 
          if (mysqli_connect_errno())
          {
-            ErrorHandler::report(ErrorHandler::UNRECOVERABLE, ERROR_CONNECT_DATABASE . mysqli_connect_errno(), __FILE__, __LINE__);
-
-            return false;
+            Error::newError(Error::UNRECOVERABLE, 1000, ERROR_CONNECT_DATABASE . mysqli_connect_errno());
          }
-
-         return true;
       }
 
       /**
@@ -529,7 +525,8 @@
          {
             if(false === $result)
             {
-               ErrorHandler::report(ErrorHandler::UNRECOVERABLE, $this->database->error, __FILE__, __LINE__);
+               // TODO: We should add a query parameter to define the importance of the query. So we could decide here how serious it is, if the query fails.
+               Error::newError(ErrorHandler::UNRECOVERABLE, 1001, $this->database->error);
 
                return false;
             }
@@ -563,7 +560,7 @@
 
          if(false === $result)
          {
-            ErrorHandler::report(ErrorHandler::UNRECOVERABLE, $this->database->error . ' - - ' . $query, __FILE__, __LINE__);
+            Error::newError(ErrorHandler::UNRECOVERABLE, 1001, $this->database->error);
 
             return false;
          }

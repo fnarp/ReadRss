@@ -17,10 +17,14 @@
 
    // include needed files
    require_once 'core/config.php';
+   require_once 'core/error.php';
    require_once 'core/benchmark.php';
    require_once 'core/mysql.php';
    require_once 'core/cookie.php';
    require_once 'core/session.php';
+   require_once 'core/template.php';
+   require_once 'contollers/user.php';
+   require_once 'contollers/page.php';
 
    /*
     * Start the timer...
@@ -42,7 +46,25 @@
     */
    $session = new Session($database);
 
-   // show page
+   /*
+    * Create user object
+    */
+   $user = new UserController($database, $session);
+
+   /*
+    * create page object
+    */
+   $page = new PageController($database, $session, $user);
+
+   /*
+    * prepare the page
+    */
+   $page->preparePage();
+
+   /*
+    * show the page
+    */
+   $page->showPage();
 
    /*
     * Show the Benchmark output.
