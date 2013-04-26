@@ -19,6 +19,7 @@
    require_once 'core/config.php';
    require_once 'core/error.php';
    require_once 'core/benchmark.php';
+   require_once 'core/security.php';
    require_once 'core/mysql.php';
    require_once 'core/cookie.php';
    require_once 'core/session.php';
@@ -55,6 +56,11 @@
     * create page object
     */
    $page = new PageController($database, $session, $user);
+
+   /*
+    * check if user is already signed in
+    */
+   $user->doCookieSignIn();
 
    /*
     * prepare the page

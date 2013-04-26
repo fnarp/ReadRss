@@ -93,14 +93,24 @@
        */
       public function preparePage()
       {
+         $signInError = '';
+         $mail = Security::getPostParameter('user');
+
+         Security::cleanGetParameters();
+
+         if(Security::checkGetParameter('action', false, 'signin') && !$this->m_user->isSignedIn())
+         {
+            $this->m_user->doSignIn($signInError, $mail, Security::getPostParameter('password'), true);
+         }
+
          if($this->m_user->isSignedIn())
          {
-            $this->m_page = 'Show the Back Page';
+            $this->m_page = $this->m_view->showOverview();
 
             return;
          }
 
-         $this->m_page = $this->m_view->showSignIn();
+         $this->m_page = $this->m_view->showSignIn($signInError, $mail);
       }
 
       /**

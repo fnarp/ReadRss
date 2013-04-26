@@ -44,9 +44,46 @@
          $this->m_session = $session;
       }
 
-      public function showSignIn()
+      public function showSignIn($errorMessage, $user)
       {
-         return 'Sign In';
+         $tpl = new Template('templates/frontend/index.tpl');
+
+         $tpl->assign('sitetitle', READRSS_SITETITLE);
+         $tpl->assign('basepath', READRSS_BASEPATH);
+         $tpl->assign('description', 'Online rss reader.');
+         $tpl->assign('keywords', 'rss reader');
+
+         if(empty($errorMessage))
+         {
+            $tpl->assign('error', '');
+         }
+         else
+         {
+            $tpl->assign('error', $errorMessage);
+         }
+
+         if(empty($user))
+         {
+            $tpl->assign('user', '');
+         }
+         else
+         {
+            $tpl->assign('user', $user);
+         }
+
+         return $tpl->getTemplate();
+      }
+
+      public function showOverview()
+      {
+         $tpl = new Template('templates/backend/index.tpl');
+
+         $tpl->assign('sitetitle', READRSS_SITETITLE);
+         $tpl->assign('basepath', READRSS_BASEPATH);
+         $tpl->assign('description', 'Online rss reader.');
+         $tpl->assign('keywords', 'rss reader');
+
+         return $tpl->getTemplate();
       }
    }
 ?>

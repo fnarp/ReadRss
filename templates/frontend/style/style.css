@@ -95,27 +95,37 @@ h1.sitetitle
 
 .loginbox
 {
-width: 250px; height:120px; text-align:center; margin:calc(25% - 241px) auto;
+   width: 250px;
+   height:120px;
+   text-align:center;
+   margin:calc(25% - 241px) auto;
 }
 
- input {
-    border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
-    border-style: solid;
-    border-width: 1px;
-    font-family: inherit;
-    font-size: 1em;
-    padding: 0.2em;
-    margin: 0.2em;
-    width: 230px;
-    }
-    
-     input[type="submit"] {
-    border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
-    border-style: solid;
-    border-width: 1px;
-    font-family: inherit;
-    font-size: 1em;
-    padding: 0.2em;
-    margin: 0.2em;
-    width: 100px;
-    }
+input
+{
+   border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+   border-style: solid;
+   border-width: 1px;
+   font-family: inherit;
+   font-size: 1em;
+   padding: 0.2em;
+   margin: 0.2em;
+   width: 230px;
+}
+
+input[type="submit"]
+{
+   border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+   border-style: solid;
+   border-width: 1px;
+   font-family: inherit;
+   font-size: 1em;
+   padding: 0.2em;
+   margin: 0.2em;
+   width: 100px;
+}
+
+.errorMsg
+{
+   color: rgb(255, 0, 0);
+}

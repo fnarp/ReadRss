@@ -84,7 +84,7 @@
       public function doSignIn(&$error, $email, $password, $setCookie)
       {
          $user = $this->m_model->getUserLoginData($email);
-
+         
          if(null !== $user)
          {
             if(!$this->m_model->checkLoginCount($user['iduser']))

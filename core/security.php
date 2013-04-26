@@ -14,9 +14,9 @@
    defined('SERVER_KEY') OR exit('No direct script access allowed');
 
    /**
-    * MySQL class
+    * Security class
     *
-    * This class provides functions to protect social+.
+    * This class provides functions to protect ReadRss.
     *
     * @package    ReadRss
     * @subpackage Core
@@ -25,6 +25,39 @@
     */
    class Security
    {
+      /**
+       * This function creats and returns a token.
+       *
+       * @param   bool  $new   decides if a new token will be created
+       *
+       * @return  string
+       */
+      public static function token($new = false)
+      {
+         $token = Session::getInstance()->get('token');
+
+         if($new | null === $token)
+         {
+            $token = sha1(uniqid(null, true));
+
+            Session::set('token', $token);
+         }
+
+         return $token;
+      }
+
+      /*
+       * This function checks the given token.
+       *
+       * @param   string   $token   contains the token to be tested
+       *
+       * @return  boolean
+       */
+      public static function checkToken($token)
+      {
+         return $token === Session::getInstance()->get('token');
+      }
+
       /**
        * Encrypts a password for the database.
        *
@@ -80,6 +113,84 @@
       public static function getAllowedLanguages()
       {
          return array('en', 'de');
+      }
+
+      /*
+       * This function modifies a string by the RegExp (alphanumeric)
+       *
+       * @param   string   $input   contains the string
+       * @param   int      $lenght  contains the maximum lenght of the string
+       * @param   int      $count   contains the number of replacements during the runtime
+       *
+       * @return  string
+       */
+      public static function alphanumeric($input, $lenght=null, &$count=null)
+      {
+         $input = preg_replace('/[[:alnum:]]/', '', $input, -1, $count);
+
+         if(null !== $lenght)
+         {
+            return substr($input, 0, $lenght);
+         }
+
+         return $input;
+      }
+
+      public static function cleanGetParameters()
+      {
+         $requestUrl = $_SERVER['QUERY_STRING'];
+         $_GET = array();
+
+         $parameters = explode('&', $requestUrl);
+
+         if(count($parameters) && $parameters[0] !== '')
+         {
+            foreach ($parameters as $parameter)
+            {
+               list($key, $value) = explode('=', $parameter);
+
+               if(isset($value))
+               {
+                  Security::alphanumeric($value);
+                  $_GET[$key] = $value;
+               }
+            }
+         }
+      }
+
+      public static function checkGetParameter($name, $emptyAllowed=true, $definedValue=NULL)
+      {
+         if(isset($_GET[$name]))
+         {
+            if(!$emptyAllowed)
+            {
+               if(empty($_GET[$name]))
+               {
+                  return false;
+               }
+            }
+
+            if($definedValue !== NULL)
+            {
+               if($definedValue !== $_GET[$name])
+               {
+                  return false;
+               }
+            }
+
+            return true;
+         }
+
+         return false;
+      }
+
+      public static function getPostParameter($name)
+      {
+         // TODO: extend
+         if(isset($_POST[$name]))
+            return $_POST[$name];
+
+         return '';
       }
    }
 ?>

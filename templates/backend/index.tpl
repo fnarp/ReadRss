@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title></title>
+      <title>{var;sitetitle}</title>
 
       <meta charset="utf-8">
 
-      <meta name="description" content="">
-      <meta name="keywords" content="">
+      <meta name="description" content="{var;description}">
+      <meta name="keywords" content="{var;keywords}">
 
-      <base href="">
+      <base href="{var;basepath}">
 
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <link rel="icon" href="templates/favico.ico" type="image/x-icon">
-      <link rel="stylesheet" href="style/style.css">
+      <link rel="stylesheet" href="templates/backend/style/style.css">
 
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
    </head>
