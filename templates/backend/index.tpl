@@ -25,7 +25,7 @@
          <aside id="sidebar">
             <section class="widget">
                <form role="search" method="POST" class="search-form">
-                  <input type="search" placeholder="Filter Articles by Title" />
+                  <input type="search" placeholder="{var;searchMsg}" />
                </form>
             </section>
             <section class="widget">

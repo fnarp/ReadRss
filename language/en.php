@@ -19,4 +19,5 @@
    $lang['UserNotExisting'] = 'The selected user does not exist.';
    $lang['ToManyLoginTries'] = 'Too many sign in attempts.';
    $lang['WrongPassword'] = 'The user or password is wrong.';
+   $lang['SearchPlaceholder'] = 'Filter Articles by Title';
 ?>

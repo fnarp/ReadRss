@@ -26,22 +26,12 @@
    class PageView
    {
       /**
-       * Contains the Session class instance.
-       *
-       * @var \Session
-       *
-       */
-      private $m_session = null;
-
-      /**
        * Constructor
-       *
-       * @param \Session   $session   contains the session instance
        *
        */
       public function __construct($session)
       {
-         $this->m_session = $session;
+         // do noting
       }
 
       public function showSignIn($errorMessage, $user)
@@ -82,6 +72,7 @@
          $tpl->assign('basepath', READRSS_BASEPATH);
          $tpl->assign('description', 'Online rss reader.');
          $tpl->assign('keywords', 'rss reader');
+         $tpl->assign('searchMsg', Template::getText('SearchPlaceholder'));
 
          return $tpl->getTemplate();
       }
