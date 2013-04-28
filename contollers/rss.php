@@ -13,7 +13,8 @@
 
    defined('SERVER_KEY') OR exit('No direct script access allowed');
 
-   include_once 'models/user.php';
+   include_once 'models/rss.php';
+   include_once 'views/rss.php';
 
    /**
     * RSS Class
@@ -36,17 +37,17 @@
       private $m_database = null;
 
       /**
-       * Contains the UserModel class instance.
+       * Contains the RssModel class instance.
        *
-       * @var \UserModel
+       * @var \RssModel
        *
        */
       private $m_model = null;
 
       /**
-       * Contains the UserView class instance.
+       * Contains the RssView class instance.
        *
-       * @var \UserView
+       * @var \RssView
        *
        */
       private $m_view = null;
