@@ -2,7 +2,7 @@
 /**
  * ReadRss
  *
- * An open source RSS collector and reader for PHP 5.4 or newer
+ * An open source RSS collector and reader for PHP 5.4 or newer.
  *
  * @package  ReadRss
  * @author   Pascal Minder <pascal.minder@trustus.ch>
@@ -16,7 +16,7 @@
    /**
     * Cookie class
     *
-    * This class provides a secure cookie class.
+    * This class provides a secure cookie implementation.
     *
     * @package    ReadRss
     * @subpackage Core
@@ -26,18 +26,18 @@
    class Cookie
    {
       /**
-       * Sets a new cookie on the visitors computer.
+       * Sets a new cookie on the visitor's computer.
        *
        * @static
        *
-       * @param string  $key        contains the cookie name
-       * @param string  $user       contains the username
-       * @param integer $timeout    contains the validity period in seconds
-       * @param string  $data       contains the string which will be saved
-       * @param integer $sessionId  contains the current session id
+       * @param   string    $key         Contains the cookie's name
+       * @param   string    $user        Contains the username that will be assigned to the cookie.
+       * @param   integer   $timeout     Contains the validity period in seconds.
+       * @param   string    $data        Contains the value which will be saved with the cookie.
+       * @param   integer   $sessionId   Contains the current session id.
        *
-       * @return true   if the cookie was set
-       * @return false  if the cookie could not be set
+       * @return  true      if the cookie was set
+       * @return  false     if the cookie could not be set
        *
        */
       public static function set($key, $user, $timeout, $data, $sessionId)
@@ -70,15 +70,15 @@
       }
 
       /**
-       * Returns the cookie value if it exists.
+       * If a cookie exists, the cookie's value will be returned.
        *
        * @static
        *
-       * @param string  $key     contains the cookie name
-       * @param int     $userId  contains the assigned user id
+       * @param   string    $key      Contains the cookie's name.
+       * @param   integer   $userId   Contains the user id which was assigned to the cookie.
        *
-       * @return  string   if the cookie could be read
-       * @return  false    if the cookie was invalid
+       * @return   string   If the cookie was valid, the cookie's value will be returned.
+       * @return   false    If the cookie was invalid, the function returns false.
        *
        */
       public static function get($key, &$userId=null)
@@ -133,9 +133,7 @@
        *
        * @static
        *
-       * @param string  $key  contains the cookie name
-       *
-       * @return  void
+       * @param   string   $key   Contains the cookie's name.
        *
        */
       public static function delete($key)

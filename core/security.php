@@ -2,7 +2,7 @@
 /**
  * ReadRss
  *
- * An open source RSS collector and reader for PHP 5.4 or newer
+ * An open source RSS collector and reader for PHP 5.4 or newer.
  *
  * @package  ReadRss
  * @author   Pascal Minder <pascal.minder@trustus.ch>
@@ -26,11 +26,11 @@
    class Security
    {
       /**
-       * This function creats and returns a token.
+       * This function creates and returns a token.
        *
-       * @param   bool  $new   decides if a new token will be created
+       * @param   bool   $new    If true, forces the function to create a new token.
        *
-       * @return  string
+       * @return   string   Returns the new token.
        */
       public static function token($new = false)
       {
@@ -47,11 +47,12 @@
       }
 
       /*
-       * This function checks the given token.
+       * This function checks if the given token is valid.
        *
-       * @param   string   $token   contains the token to be tested
+       * @param   string   $token   Contains the token to be checked.
        *
-       * @return  boolean
+       * @return   true    If the token is valid.
+       * @return   false   If the token is invalid.
        */
       public static function checkToken($token)
       {

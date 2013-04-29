@@ -1,14 +1,13 @@
 <?php
 /**
- * social+
+ * ReadRss
  *
- * An open source social network for PHP 5.4 or newer
+ * An open source RSS collector and reader for PHP 5.4 or newer.
  *
- * @package  SocialPlus
+ * @package  ReadRss
  * @author   Pascal Minder <pascal.minder@trustus.ch>
- * @author   Sandro Roth <sandro.roth@leuchterag.ch>
  * @license  http://creativecommons.org/licenses/by-nc-sa/3.0/ CC BY-NC-SA 3.0
- * @link     https://github.com/HotPizzaBox/socialplus
+ * @link     https://github.com/HotPizzaBox/readrss
  *
  */
 
@@ -19,7 +18,7 @@
     *
     * Contains the database abstraction layer for the UserController.
     *
-    * @package    SocialPlus
+    * @package    ReadRss
     * @subpackage Model
     * @author     Pascal Minder <pascal.minder@trustus.ch>
     *
