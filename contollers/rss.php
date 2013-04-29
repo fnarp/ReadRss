@@ -56,34 +56,26 @@
        * Class constructor
        *
        * @param \MySQL     $database   contains the database instance
-       * @param \Session   $session    contains the session instance
        *
        * @return  void
        *
        */
-      public function __construct($database, $session)
+      public function __construct($database)
       {
          $this->m_database = $database;
-         $this->m_session = $session;
          $this->m_model = new RssModel($this->m_database);
          $this->m_view = new RssView();
 
          Template::registerController(__CLASS__, $this);
       }
 
-      public function fetchContent($url)
+      public function createFeed($feedUrl)
       {
-         $ch = curl_init();
+         
+      }
 
-         curl_setopt($ch, CURLOPT_URL, $url);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-
-         $data = curl_exec($ch);
-
-         curl_close($ch);
-
-         return $data;
+      public function updateFeeds()
+      {
       }
    }
 ?>

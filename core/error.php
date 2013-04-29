@@ -32,7 +32,7 @@
 
       public static function newError($type, $code, $message)
       {
-         echo ("exception!");
+         echo ($message);
 
          if($type === self::UNRECOVERABLE)
          {

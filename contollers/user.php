@@ -84,7 +84,7 @@
       public function doSignIn(&$error, $email, $password, $setCookie)
       {
          $user = $this->m_model->getUserLoginData($email);
-         
+
          if(null !== $user)
          {
             if(!$this->m_model->checkLoginCount($user['iduser']))
@@ -182,7 +182,7 @@
          $this->m_model->deleteAuthCookieSecret($this->m_session->get(SESSION_NAME_USERID));
 
          // close the session
-         self::$m_Session->close(self::$m_Session->getSessionId());
+         $this->m_session->close($this->m_session->getSessionId());
 
          // delete auth cookie
          Cookie::delete(COOKIE_NAME_AUTHENTIFICATION);

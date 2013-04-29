@@ -526,7 +526,7 @@
             if(false === $result)
             {
                // TODO: We should add a query parameter to define the importance of the query. So we could decide here how serious it is, if the query fails.
-               Error::newError(ErrorHandler::UNRECOVERABLE, 1001, $this->database->error);
+               Error::newError(Error::UNRECOVERABLE, 1001, $this->database->error);
 
                return false;
             }
@@ -555,12 +555,15 @@
                return true;
             }
 
+            Error::newError(Error::ERROR, 10000, $this->database->error);
+
             return false;
          }
 
          if(false === $result)
          {
-            Error::newError(ErrorHandler::UNRECOVERABLE, 1001, $this->database->error);
+            echo $query;
+            Error::newError(Error::UNRECOVERABLE, 1001, $this->database->error);
 
             return false;
          }

@@ -24,6 +24,7 @@
    require_once 'core/cookie.php';
    require_once 'core/session.php';
    require_once 'core/template.php';
+   require_once 'contollers/rss.php';
    require_once 'contollers/user.php';
    require_once 'contollers/page.php';
 
@@ -75,5 +76,5 @@
    /*
     * Show the Benchmark output.
     */
-   echo $benchmark->elapsed_time('total_execution_time_start');
+   $benchmark->mark('total_execution_time_start');
 ?>

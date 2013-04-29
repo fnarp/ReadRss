@@ -20,4 +20,10 @@
    $lang['ToManyLoginTries'] = 'Too many sign in attempts.';
    $lang['WrongPassword'] = 'The user or password is wrong.';
    $lang['SearchPlaceholder'] = 'Filter Articles by Title';
+   $lang['MenuNew'] = 'New';
+   $lang['MenuStarred'] = 'Starred';
+   $lang['MenuArchive'] = 'Archive';
+   $lang['MenuTags'] = 'Tags';
+   $lang['ShowRssFeeds'] = 'Show all rss feeds.';
+   $lang['SignOut'] = 'Sign out';
 ?>

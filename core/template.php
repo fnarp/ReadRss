@@ -127,6 +127,10 @@
             {
                $templateText = str_replace('{'.$mod['text'].'}', $this->callController($mod['class'], $mod['function'], $mod['parameters']), $templateText);
             }
+            elseif($mod['type'] === 'trl')
+            {
+               $templateText = str_replace('{'.$mod['text'].'}', self::getText($mod['name']), $templateText);
+            }
             else
             {
                $templateText = str_replace('{'.$mod['text'].'}', $this->allocations[$mod['name']], $templateText);
@@ -171,6 +175,10 @@
                $modifier['class'] = $fields[1];
                $modifier['function'] = $fields[2];
                $modifier['parameters'] = $fields[3];
+            }
+            elseif($modifier['type'] === 'trl')
+            {
+               $modifier['name'] = $fields[1];
             }
             else
             {

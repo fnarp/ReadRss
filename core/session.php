@@ -27,15 +27,15 @@
    class Session
    {
       /**
-       * MySQL class instance
+       * MySQL class instance.
        *
-       * @var MySQL
+       * @var \MySQL
        *
        */
       private $m_database = null;
 
       /**
-       * session id
+       * Contains the session id.
        *
        * @var integer
        *
@@ -43,12 +43,20 @@
       private $sessionId = null;
 
       /**
-       * session data
+       * Contains the session data.
        *
        * @var array
        *
        */
       private $session = array();
+
+      /**
+       * Defines if the session was closed.
+       *
+       * @var bolean
+       *
+       */
+      private $m_closed = false;
 
       /**
        * Initializes a new Session.
@@ -78,20 +86,20 @@
 
          if($this->sessionId)
          {
-            if(self::load($cookie) === true)
+            if($this->load($cookie) === true)
             {
                return true;
             }
          }
 
-         self::close();
+         $this->close();
 
-         if(self::create())
+         if($this->create())
          {
             return true;
          }
 
-         Error::newError(ErrorHandler::UNRECOVERABLE, 1001, ERROR_CREATING_SESSION);
+         Error::newError(Error::UNRECOVERABLE, 1001, ERROR_CREATING_SESSION);
 
          return false;
       }
@@ -125,7 +133,7 @@
             return true;
          }
 
-         Error::newError(ErrorHandler::UNRECOVERABLE, 1002, ERROR_SAVE_SESSION);
+         Error::newError(Error::UNRECOVERABLE, 1002, ERROR_SAVE_SESSION);
 
          return false;
       }
@@ -157,7 +165,7 @@
 
                if(!$this->m_database->executeUpdate(true))
                {
-                  Error::newError(ErrorHandler::UNRECOVERABLE, 1003, ERROR_UPDATE_SESSION);
+                  Error::newError(Error::UNRECOVERABLE, 1003, ERROR_UPDATE_SESSION);
                }
 
                $this->sessionId = $sessionId;
@@ -187,6 +195,11 @@
        */
       public function write()
       {
+         if($this->m_closed)
+         {
+            return;
+         }
+
          $this->m_database->cleanUp();
 
          $this->m_database->update('session')
@@ -196,7 +209,7 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            Error::newError(ErrorHandler::UNRECOVERABLE, 1004, ERROR_SAVE_SESSION);
+            Error::newError(Error::UNRECOVERABLE, 1004, ERROR_SAVE_SESSION);
          }
       }
 
@@ -210,6 +223,8 @@
        */
       public function close($session_id = 0)
       {
+         $this->m_closed = true;
+
          if($session_id !== 0)
          {
             $this->m_database->delete()
@@ -309,7 +324,7 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            Error::newError(ErrorHandler::UNRECOVERABLE, 1005, ERROR_SET_SESSION_OWNER);
+            Error::newError(Error::UNRECOVERABLE, 1005, ERROR_SET_SESSION_OWNER);
          }
       }
    }

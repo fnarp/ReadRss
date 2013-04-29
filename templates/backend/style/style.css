@@ -173,12 +173,6 @@ h1.sitetitle
    border-width: 1px;
 }
 
-#sidebar .widget .search-form .searching
-{
-   padding-left: 20px;
-   background: url("../images/spinner.gif") no-repeat scroll left center transparent;
-}
-
 #main-nav
 {
    border-top: 1px solid #E2DDD6;
@@ -270,7 +264,6 @@ h1.sitetitle
 
 #control-nav ul.controls li.control a
 {
-    background: url("../images/bookmark-list-controls-sprite.png") no-repeat scroll center -17.2% transparent;
     border-image: none;
     color: #333333;
     cursor: pointer;
@@ -284,6 +277,16 @@ h1.sitetitle
     white-space: nowrap;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid #DBDBDB;
+}
+
+#control-nav ul.controls li.control a.rss
+{
+   background: url("../images/menu_rss.png") no-repeat scroll center transparent;
+}
+
+#control-nav ul.controls li.control a.signout
+{
+   background: url("../images/menu_signout.png") no-repeat scroll center transparent;
 }
 
 #content

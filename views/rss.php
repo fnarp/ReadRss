@@ -23,7 +23,7 @@
     * @author     Pascal Minder <pascal.minder@trustus.ch>
     *
     */
-   class PageView
+   class RssView
    {
       /**
        * Constructor

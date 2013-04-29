@@ -72,7 +72,6 @@
          $tpl->assign('basepath', READRSS_BASEPATH);
          $tpl->assign('description', 'Online rss reader.');
          $tpl->assign('keywords', 'rss reader');
-         $tpl->assign('searchMsg', Template::getText('SearchPlaceholder'));
 
          return $tpl->getTemplate();
       }

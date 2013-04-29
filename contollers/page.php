@@ -52,6 +52,13 @@
       private $m_user = null;
 
       /**
+       * Contains the Rss class instance.
+       *
+       * @var \Rss
+       */
+      private $m_rss = null;
+
+      /**
        * Contains the UserView class instance.
        *
        * @var \UserView
@@ -80,6 +87,7 @@
          $this->m_database = $database;
          $this->m_session = $session;
          $this->m_user = $user;
+         $this->m_rss = new RSS($this->m_database);
          $this->m_view = new PageView($this->m_session);
 
          Template::registerController(__CLASS__, $this);
@@ -111,6 +119,40 @@
          }
 
          $this->m_page = $this->m_view->showSignIn($signInError, $mail);
+      }
+
+      public function showContent()
+      {
+         if(Security::checkGetParameter('show', false))
+         {
+            return 'Show posts from starred, archive or specifed tag.';
+         }
+         elseif(Security::checkGetParameter('action', false, 'feeds'))
+         {
+            return 'Show all rss sources.';
+         }
+         elseif(Security::checkGetParameter('action', false, 'search'))
+         {
+            return 'search for posts in all feeds';
+         }
+         elseif(Security::checkGetParameter('action', false, 'logout'))
+         {
+            $this->m_user->doSignOut();
+         }
+         else
+         {
+            return 'Show new posts.';
+         }
+      }
+
+      public function showTags()
+      {
+         /*
+          * <li class="tag"><a href="#">George Orwell</a></li>
+          *                 <li class="tag"><a href="#">Book</a></li>
+          */
+
+         return '<li class="tag"><a href="#">George Orwell</a></li>';
       }
 
       /**
