@@ -89,7 +89,7 @@
          {
             if(!$this->m_model->checkLoginCount($user['iduser']))
             {
-               if($user['password'] === Security::encryptPassword($password, $user['salt']))
+               if(Security::checkPassword($email, $password, $user['password']))
                {
                   $this->m_session->set(SESSION_NAME_USERID, $user['iduser']);
                   $this->m_session->setSessionOwner($user['iduser']);
@@ -199,7 +199,7 @@
       public function renewAuthCookie()
       {
          $userId = $this->m_session->get(SESSION_NAME_USERID);
-         $secret = Security::generatePassword(20);
+         $secret = Security::generateRandomString(20);
 
          $this->m_model->saveAuthCookieSecret($userId, $secret);
 

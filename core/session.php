@@ -2,7 +2,7 @@
 /**
  * ReadRss
  *
- * An open source RSS collector and reader for PHP 5.4 or newer
+ * An open source RSS collector and reader for PHP 5.4 or newer.
  *
  * @package  ReadRss
  * @author   Pascal Minder <pascal.minder@trustus.ch>
@@ -61,10 +61,10 @@
       /**
        * Initializes a new Session.
        *
-       * @param \MySQL     $database   contains the database instance
+       * @param   \MySQL   $database   Contains the database instance.
        *
-       * @return true   if the session was successfully created
-       * @return false  if the session could not be created
+       * @return   true    If the session was successfully created.
+       * @return   false   If the session could not be created.
        *
        */
       public function __construct($database)
@@ -99,7 +99,7 @@
             return true;
          }
 
-         Error::newError(Error::UNRECOVERABLE, 1001, ERROR_CREATING_SESSION);
+         Error::newError(Error::UNRECOVERABLE, ERROR_CREATING_SESSION);
 
          return false;
       }
@@ -107,8 +107,8 @@
       /**
        * Creates a new session.
        *
-       * @return true   if the session was successfully created
-       * @return false  if the session could not be created
+       * @return   true    If the session was successfully created.
+       * @return   false   If the session could not be created.
        *
        */
       private function create()
@@ -133,7 +133,7 @@
             return true;
          }
 
-         Error::newError(Error::UNRECOVERABLE, 1002, ERROR_SAVE_SESSION);
+         Error::newError(Error::UNRECOVERABLE, ERROR_SAVE_SESSION);
 
          return false;
       }
@@ -141,10 +141,10 @@
       /**
        * Loads a session from the database
        *
-       * @param integer $sessionId contains the session id
+       * @param   integer   $sessionId   Contains the session id.
        *
-       * @return true   if the session was successfully loaded
-       * @return false  if the session could not be loaded
+       * @return   true    If the session was successfully loaded.
+       * @return   false   If the session could not be loaded.
        *
        */
       private function load($sessionId)
@@ -165,7 +165,7 @@
 
                if(!$this->m_database->executeUpdate(true))
                {
-                  Error::newError(Error::UNRECOVERABLE, 1003, ERROR_UPDATE_SESSION);
+                  Error::newError(Error::UNRECOVERABLE, ERROR_UPDATE_SESSION);
                }
 
                $this->sessionId = $sessionId;
@@ -190,8 +190,6 @@
       /**
        * This method is called by PHP (register_shutdown_function) and saves the session into the database.
        *
-       * @return  void
-       *
        */
       public function write()
       {
@@ -209,16 +207,14 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            Error::newError(Error::UNRECOVERABLE, 1004, ERROR_SAVE_SESSION);
+            Error::newError(Error::UNRECOVERABLE, ERROR_SAVE_SESSION);
          }
       }
 
       /**
        * This method destroys a session and cleans up.
        *
-       * @param integer $session_id contains the session id
-       *
-       * @return  void
+       * @param   integer   $session_id   Contains the session id.
        *
        */
       public function close($session_id = 0)
@@ -248,10 +244,8 @@
       /**
        * This method sets a session variable.
        *
-       * @param string $key   contains the variable name
-       * @param mixed  $value contains the variavle value
-       *
-       * @return  void
+       * @param   string   $key     Contains the variable name.
+       * @param   mixed    $value   Contains the variavle value.
        *
        */
       public function set($key, $value)
@@ -262,10 +256,10 @@
       /**
        * This method returns the specified variable value.
        *
-       * @param string $key contains the variable name
+       * @param   string   $key   Contains the variable name.
        *
-       * @return mixed returns the session value
-       * @return null  if an error occurred
+       * @return   mixed   Returns the session value.
+       * @return   null    If an error occurred.
        *
        */
       public function get($key)
@@ -281,10 +275,8 @@
       /**
        * This method delets a session variable.
        *
-       * @param string $key contains the variable name
-       *
-       * @return  void
-       *
+       * @param   string   $key   Contains the variable name.
+       * 
        */
       public function delete($key)
       {
@@ -297,7 +289,7 @@
       /**
        * This method returns the session id.
        *
-       * @return integer the session id
+       * @return   integer   The session id.
        *
        */
       public function getSessionId()
@@ -306,11 +298,9 @@
       }
 
       /**
-       * This method connects a user to a session
+       * This method connects a user to a session.
        *
-       * @param integer $user_id contains the user id
-       *
-       * @return  void
+       * @param   integer   $user_id   Contains the user id.
        *
        */
       public function setSessionOwner($user_id)
@@ -324,7 +314,7 @@
 
          if(!$this->m_database->executeUpdate(true))
          {
-            Error::newError(Error::UNRECOVERABLE, 1005, ERROR_SET_SESSION_OWNER);
+            Error::newError(Error::UNRECOVERABLE, ERROR_SET_SESSION_OWNER);
          }
       }
    }

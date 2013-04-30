@@ -87,7 +87,7 @@
          $this->m_database = $database;
          $this->m_session = $session;
          $this->m_user = $user;
-         $this->m_rss = new RSS($this->m_database);
+         //$this->m_rss = new RSS($this->m_database);
          $this->m_view = new PageView($this->m_session);
 
          Template::registerController(__CLASS__, $this);

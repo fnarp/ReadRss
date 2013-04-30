@@ -2,7 +2,7 @@
 /**
  * ReadRss
  *
- * An open source RSS collector and reader for PHP 5.4 or newer
+ * An open source RSS collector and reader for PHP 5.4 or newer.
  *
  * @package  ReadRss
  * @author   Pascal Minder <pascal.minder@trustus.ch>
@@ -68,9 +68,7 @@
       /**
        * Constructor - loads a template file
        *
-       * @param string $path contains the path to the template file
-       *
-       * @return  void
+       * @param   string   $path   Contains the path to the template file.
        *
        */
       public function __construct($path)
@@ -81,17 +79,15 @@
          }
          else
          {
-            ErrorHandler::report(ErrorHandler::UNRECOVERABLE, ERROR_FILE, __FILE__, __LINE__);
+            Error::newError(Error::ERROR, ERROR_TEMPLATEFILE_NOT_FOUND);
          }
       }
 
       /**
        * Adds a new placeholder allocation.
        *
-       * @param string $name     placeholder name
-       * @param string $value    placeholder value
-       *
-       * @return  void
+       * @param   string   $name    Placeholder name.
+       * @param   string   $value   Placeholder value.
        *
        */
       public function assign($name, $value)
@@ -102,8 +98,6 @@
       /**
        * Clears the allocation array.
        *
-       * @return  void
-       *
        */
       public function clear()
       {
@@ -113,7 +107,7 @@
       /**
        * Creates and returns the parsed template string.
        *
-       * @return string ready to use template
+       * @return   string   Ready to use template.
        *
        */
       public function getTemplate()
@@ -143,7 +137,7 @@
       /**
        * Finds all placeholder in the template.
        *
-       * @return array  the position of all the placeholder
+       * @return   array   The position of all the placeholder.
        *
        */
       private function findTemplateModifiers()
@@ -194,11 +188,11 @@
       /**
        * Calls a controller which was referenced in the template file.
        *
-       * @param string $controller  class name
-       * @param string $method      method name
-       * @param string $argument    arguments
+       * @param   string   $controller   Contains the class' name.
+       * @param   string   $method       Contains the class method's name.
+       * @param   string   $argument     Contains the arguments which will be passed to the function.
        *
-       * @return string    returns method output
+       * @return   string   Returns method output.
        *
        */
       private function callController($controller, $method, $argument)
@@ -223,10 +217,8 @@
       /**
        * Registers a controller which can be referenced in a template file.
        *
-       * @param string $name        class name
-       * @param object $instance    instance
-       *
-       * @return  void
+       * @param   string   $name       Contains the class' name.
+       * @param   object   $instance   Contains the class instance.
        *
        */
       public static function registerController($name, $instance)
@@ -240,9 +232,7 @@
       /**
        * Loads a language file.
        *
-       * @param string $language
-       *
-       * @return  void
+       * @param   string   $language   Contains the language abbreviation.
        *
        */
       public static function loadLanguage($language)
@@ -256,7 +246,7 @@
       /**
        * Returns a text in the loaded language.
        *
-       * @param string $name  contains the text name
+       * @param   string   $name   Contains the name
        *
        * @return string
        *

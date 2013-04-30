@@ -28,6 +28,8 @@
       /**
        * This function creates and returns a token.
        *
+       * @static
+       * 
        * @param   bool   $new    If true, forces the function to create a new token.
        *
        * @return   string   Returns the new token.
@@ -49,6 +51,8 @@
       /*
        * This function checks if the given token is valid.
        *
+       * @static
+       * 
        * @param   string   $token   Contains the token to be checked.
        *
        * @return   true    If the token is valid.
@@ -62,33 +66,58 @@
       /**
        * Encrypts a password for the database.
        *
-       * @param   string   $password   contains the password
-       * @param   string   $salt       contains the salt
-       *
-       * @return  string   contians the encrypted password
-       *
+       * @static
+       * 
+       * @param   string   $mail       Contains the user's mail.
+       * @param   string   $password   Contains the user's password.
+       * @param   string   $salt       Contains the user specife salt.
+       * @param   string   $rounds     Contains the number of rounds for crypt.
+       * 
+       * @return   string   Returns the encrypted password.
+       * 
        */
-      public static function encryptPassword($password, $salt)
+      public static function encryptPassword($mail, $password, $salt, $rounds='08')
       {
-         $md5_pass = $password.$salt;
+         $length = strlen($password) * 4;
+         $data = str_pad($password, $length, sha1($mail), STR_PAD_BOTH);
+         $string = hash_hmac('whirlpool', $data, SERVER_KEY, true);
+         
+         return crypt($string, '$2a$' . $rounds . '$' . $salt);
+      }
 
-         for($i = 0; $i < 1000; ++$i)
-         {
-            $md5_pass = md5($md5_pass);
-         }
-
-         return $md5_pass;
+      /**
+       * Checks if the given password is valid.
+       *
+       * @static
+       * 
+       * @param   string   $mail       Contains the user's mail.
+       * @param   string   $password   Contains the user's password.
+       * @param   string   $stored     Contains the stored password.
+       * 
+       * @return   true   If the password was valid.
+       * @return   false  If the password was invalid.
+       * 
+       */
+      public static function checkPassword($mail, $password, $stored)
+      {
+         $length = strlen($password) * 4;
+         $data = str_pad($password, $length, sha1($mail), STR_PAD_BOTH);
+         $string = hash_hmac ('whirlpool', $data, SERVER_KEY, true);
+         
+         return (crypt($string, substr($stored, 0, 30)) === $stored);
       }
 
       /**
        * Creats a new password with the given parameters.
        *
-       * @param   string   $length   contains the lenght of the password
+       * @static
+       * 
+       * @param   integer   $length   Contains the password's lenght.
        *
-       * @return  string   contains a new generated password
+       * @return   string   Returns the generated password.
        *
        */
-      public static function generatePassword($length)
+      public static function generateRandomString($length)
       {
          $upperLetter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
          $lowerLetter = 'abcdefghijklmnopqrstuvwxyz';
@@ -108,7 +137,9 @@
       /**
        * Returns all available languages.
        *
-       * @return  array   contains all available languages.
+       * @static
+       * 
+       * @return   array   Returns an array with all available languages.
        *
        */
       public static function getAllowedLanguages()
@@ -117,13 +148,15 @@
       }
 
       /*
-       * This function modifies a string by the RegExp (alphanumeric)
+       * This function modifies a string by the regex (alphanumeric).
        *
-       * @param   string   $input   contains the string
-       * @param   int      $lenght  contains the maximum lenght of the string
-       * @param   int      $count   contains the number of replacements during the runtime
+       * @static
+       * 
+       * @param   string   $input    Contains the string which will be checked.
+       * @param   int      $lenght   Contains the maximum lenght of input.
+       * @param   int      $count    Contains the number of replacements which were made during runtime.
        *
-       * @return  string
+       * @return   string   Returns the checked string.
        */
       public static function alphanumeric($input, $lenght=null, &$count=null)
       {
@@ -137,6 +170,12 @@
          return $input;
       }
 
+      /**
+       * This function recreates the $_GET array. While doing this it removes all bad characters.
+       *
+       * @static
+       * 
+       */
       public static function cleanGetParameters()
       {
          $requestUrl = $_SERVER['QUERY_STRING'];
@@ -159,6 +198,19 @@
          }
       }
 
+      /**
+       * Checks if a $_GET parameter is set.
+       *
+       * @static
+       * 
+       * @param   string   $name           Contains the parameter's name.
+       * @param   bool     $emptyAllowed   Defines if the parameter is allowed to be empty.
+       * @param   string   $definedValue   Defines if the parameter neeed a defined value.
+       * 
+       * @return   true    If all requirements are met.
+       * @return   false   If one requirement is not met.
+       * 
+       */
       public static function checkGetParameter($name, $emptyAllowed=true, $definedValue=NULL)
       {
          if(isset($_GET[$name]))
