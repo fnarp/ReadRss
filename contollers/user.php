@@ -94,7 +94,7 @@
                   $this->m_session->set(SESSION_NAME_USERID, $user['iduser']);
                   $this->m_session->setSessionOwner($user['iduser']);
 
-                  $this->m_model->addLoginCount($user['iduser'], true);
+                  $this->m_model->addLoginCount($user['iduser'], 1);
 
                   if($setCookie)
                   {
@@ -103,6 +103,8 @@
 
                   return true;
                }
+
+               $this->m_model->addLoginCount($user['iduser'], 0);
 
                $error = Template::getText('WrongPassword');
 

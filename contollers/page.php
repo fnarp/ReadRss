@@ -152,7 +152,7 @@
           *                 <li class="tag"><a href="#">Book</a></li>
           */
 
-         return '<li class="tag"><a href="#">George Orwell</a></li>';
+         return '<li class="tag"><a href="?show=tags&amp;tag=George_Orwell">George Orwell</a></li>';
       }
 
       /**

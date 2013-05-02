@@ -35,7 +35,7 @@
                      <li class="nav-item"><a href="?show=starred">{trl;MenuStarred}</a></li>
                      <li class="nav-item"><a href="?show=archive">{trl;MenuArchive}</a></li>
                      <li class="nav-item">
-                        <a href="">{trl;MenuTags}</a>
+                        <a href="?show=tags">{trl;MenuTags}</a>
                         <ul class="tag-list">
                            {ctr;PageController;showTags;}
                         </ul>

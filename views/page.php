@@ -29,7 +29,7 @@
        * Constructor
        *
        */
-      public function __construct($session)
+      public function __construct()
       {
          // do noting
       }

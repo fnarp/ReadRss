@@ -171,8 +171,8 @@
                             ->where('time BETWEEN DATE_SUB(NOW(), INTERVAL 10 MINUTE) AND NOW()');
 
          $result = $this->m_database->executeCount();
-
-         if(count($result) >= MAX_LOGIN_TRYES)
+         
+         if($result >= MAX_LOGIN_TRYES)
          {
             return true;
          }

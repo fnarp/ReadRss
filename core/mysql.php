@@ -95,7 +95,7 @@
 
          if (mysqli_connect_errno())
          {
-            Error::newError(Error::UNRECOVERABLE, 1000, ERROR_CONNECT_DATABASE . mysqli_connect_errno());
+            Error::newError(Error::UNRECOVERABLE, ERROR_CONNECT_DATABASE . mysqli_connect_errno());
          }
       }
 
@@ -469,7 +469,7 @@
             $return = array();
 
             $query = $this->getCountSQL();
-
+            
             if($this->isDirty == false)
             {
                if($this->executeQuery($query, true, $return))
@@ -526,7 +526,7 @@
             if(false === $result)
             {
                // TODO: We should add a query parameter to define the importance of the query. So we could decide here how serious it is, if the query fails.
-               Error::newError(Error::UNRECOVERABLE, 1001, $this->database->error);
+               Error::newError(Error::UNRECOVERABLE, $this->database->error);
 
                return false;
             }
@@ -555,7 +555,7 @@
                return true;
             }
 
-            Error::newError(Error::ERROR, 10000, $this->database->error);
+            Error::newError(Error::ERROR, $this->database->error);
 
             return false;
          }
@@ -563,7 +563,7 @@
          if(false === $result)
          {
             echo $query;
-            Error::newError(Error::UNRECOVERABLE, 1001, $this->database->error);
+            Error::newError(Error::UNRECOVERABLE, $this->database->error);
 
             return false;
          }
