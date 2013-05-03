@@ -147,6 +147,12 @@ h1.sitetitle
    background-color: rgb(247, 247, 247);
 }
 
+h1.sitetitle a:hover
+{
+   color: black;
+   background-color: rgb(247, 247, 247);
+}
+
 #sidebar
 {
    width: 190px;

@@ -14,6 +14,7 @@
    defined('SERVER_KEY') OR exit('No direct script access allowed');
 
    include_once 'views/page.php';
+   include_once 'models/page.php';
 
    /**
     * PageController Class
@@ -59,12 +60,20 @@
       private $m_rss = null;
 
       /**
-       * Contains the UserView class instance.
+       * Contains the PageView class instance.
        *
-       * @var \UserView
+       * @var \PageView
        *
        */
       private $m_view = null;
+
+      /**
+       * Contains the PageModel class instance.
+       *
+       * @var \PageModel
+       *
+       */
+      private $m_model = null;
 
       /**
        * Contains the whole page source.
@@ -87,16 +96,16 @@
          $this->m_database = $database;
          $this->m_session = $session;
          $this->m_user = $user;
-         //$this->m_rss = new RSS($this->m_database);
-         $this->m_view = new PageView($this->m_session);
+         $this->m_view = new PageView();
+         $this->m_model = new PageModel($this->m_database, $this->m_session);
+
+         $this->m_rss = new RSS($this->m_database);
 
          Template::registerController(__CLASS__, $this);
       }
 
       /**
        * Prepares the HTML code of the page.
-       *
-       * @return  void
        *
        */
       public function preparePage()
@@ -129,7 +138,14 @@
          }
          elseif(Security::checkGetParameter('action', false, 'feeds'))
          {
-            return 'Show all rss sources.';
+            /*
+             * show all rss sources.
+             *
+             */
+
+            $this->m_rss->parseFeedArguments();
+
+            return $this->m_rss->getFeedList();
          }
          elseif(Security::checkGetParameter('action', false, 'search'))
          {
@@ -145,14 +161,15 @@
          }
       }
 
+      /**
+       * This function shows a list with all tags on the page.
+       *
+       * @return   string   Contains the html code of the list.
+       *
+       */
       public function showTags()
       {
-         /*
-          * <li class="tag"><a href="#">George Orwell</a></li>
-          *                 <li class="tag"><a href="#">Book</a></li>
-          */
-
-         return '<li class="tag"><a href="?show=tags&amp;tag=George_Orwell">George Orwell</a></li>';
+         return $this->m_view->showTagList($this->m_model->getTagList());
       }
 
       /**

@@ -150,6 +150,7 @@
             }
             else
             {
+               $this->m_model->addLoginCount($userId, false);
                Cookie::delete(COOKIE_NAME_AUTHENTIFICATION);
             }
          }

@@ -103,7 +103,7 @@
          $userKey = hash_hmac('md5', $rawCookie[0] . '~' . $rawCookie[1], SERVER_KEY);
 
          // return user Id
-         if($userId !== null)
+         if($rawCookie[0] !== SESSION_DEFAULT_USER)
          {
             $userId = $rawCookie[0];
          }

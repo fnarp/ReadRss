@@ -64,8 +64,8 @@
                             ->where('last_activity BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()');
 
          $result = $this->m_database->executeCount();
-
-         if(is_array($result) && count($result) === 1)
+         
+         if(count($result) === 1)
          {
             return true;
          }
@@ -171,7 +171,7 @@
                             ->where('time BETWEEN DATE_SUB(NOW(), INTERVAL 10 MINUTE) AND NOW()');
 
          $result = $this->m_database->executeCount();
-         
+
          if($result >= MAX_LOGIN_TRYES)
          {
             return true;

@@ -18,7 +18,7 @@
     *
     * Contains the database abstraction layer for the RssController.
     *
-    * @package    SocialPlus
+    * @package    ReadRss
     * @subpackage Model
     * @author     Pascal Minder <pascal.minder@trustus.ch>
     *

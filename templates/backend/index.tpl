@@ -20,7 +20,7 @@
    <body>
       <div id="page">
          <header id="header">
-            <h1 class="sitetitle">ReadRSS</h1>
+            <h1 class="sitetitle"><a href="index.php">ReadRSS</a></h1>
          </header>
          <aside id="sidebar">
             <section class="widget">

@@ -116,7 +116,7 @@
          $session_id = 0;
 
          $this->m_database->insert('session')
-                            ->set('data', base64_encode(serialize($this->session)), 's')
+                            ->set('session_data', base64_encode(serialize($this->session)), 's')
                             ->set('activity', 'NOW()');
 
          if($this->m_database->executeInsert($session_id, true) === true)
@@ -151,7 +151,7 @@
       {
          $result = array();
 
-         $this->m_database->select('fk_user', 'data', 'activity')
+         $this->m_database->select('fk_user', 'session_data', 'activity')
                             ->from('session', 's')
                             ->where('idsession = ' . $sessionId);
 
@@ -169,7 +169,7 @@
                }
 
                $this->sessionId = $sessionId;
-               $this->session = unserialize(base64_decode($result[0]['data']));
+               $this->session = unserialize(base64_decode($result[0]['session_data']));
 
                if(Cookie::set(SESSION_KEY, SESSION_DEFAULT_USER, SESSION_TIMEOUT, $this->sessionId, $this->sessionId))
                {
@@ -201,7 +201,7 @@
          $this->m_database->cleanUp();
 
          $this->m_database->update('session')
-                            ->set('data', base64_encode(serialize($this->session)), 's')
+                            ->set('session_data', base64_encode(serialize($this->session)), 's')
                             ->set('activity', 'Now()')
                             ->where('idsession = ' . $this->sessionId);
 
@@ -276,7 +276,7 @@
        * This method delets a session variable.
        *
        * @param   string   $key   Contains the variable name.
-       * 
+       *
        */
       public function delete($key)
       {
