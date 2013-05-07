@@ -370,6 +370,11 @@ h1.sitetitle a:hover
    float: right;
 }
 
+#content .feed_list .feed .feed_options .feed_edit
+{
+   cursor: pointer;
+}
+
 #content .feed_list .feed .feed_options .feed_config
 {
 

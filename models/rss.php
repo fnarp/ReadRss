@@ -79,7 +79,7 @@
          $xmlRssFeed = $this->fetchContent($url);
 
          $xml = simplexml_load_string($xmlRssFeed);
-
+         
          if(false === $xml)
          {
             Error::newError(Error::WARNING, Template::getText('FailedReadingRssFeed'));
@@ -102,10 +102,11 @@
          {
             $this->m_database->insert('feed')
                                ->set('title', $channelTitle, 's')
-                               ->set('link', $channelLink, 's')
+                               ->set('website', $channelLink, 's')
                                ->set('description', $channelDescription, 's')
                                ->set('language', $channelLanguage, 's')
-                               ->set('unique_id', uniqid(), 's');
+                               ->set('unique_id', uniqid(), 's')
+                               ->set('feed_url', $url, 's');
 
             $this->m_database->executeInsert($fk_feed, true);
          }
@@ -161,7 +162,7 @@
 
          $this->m_database->select('idfeed')
                             ->from('feed', 'f')
-                            ->where('link="' . $feedUrl . '"');
+                            ->where('feed_url = "' . $feedUrl . '"');
 
          $this->m_database->executeSelect($result);
 
@@ -178,7 +179,7 @@
          $ch = curl_init();
 
          curl_setopt($ch, CURLOPT_URL, $url);
-         //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
          curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 

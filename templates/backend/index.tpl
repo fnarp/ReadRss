@@ -16,6 +16,7 @@
       <link rel="stylesheet" href="templates/backend/style/style.css">
 
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script src="templates/backend/scripts/basic.js"></script>
    </head>
    <body>
       <div id="page">
