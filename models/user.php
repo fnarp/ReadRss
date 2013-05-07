@@ -64,7 +64,7 @@
                             ->where('last_activity BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()');
 
          $result = $this->m_database->executeCount();
-         
+
          if(count($result) === 1)
          {
             return true;

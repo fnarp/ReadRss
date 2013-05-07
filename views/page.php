@@ -87,5 +87,24 @@
 
          return $list;
       }
+
+      public function showFeedList($items)
+      {
+         $tplList = new Template('templates/backend/templates/feed_list.tpl');
+         $tplItem = new Template('templates/backend/templates/feed_list_item.tpl');
+         $itemsList = '';
+
+         foreach($items as $item)
+         {
+            $tplItem->assign('name', $item['title']);
+            $tplItem->assign('uniqueId', $item['uId']);
+
+            $itemsList .= $tplItem->getTemplate();
+         }
+
+         $tplList->assign('items', $itemsList);
+
+         return $tplList->getTemplate();
+      }
    }
 ?>

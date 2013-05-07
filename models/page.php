@@ -34,26 +34,17 @@
       private $m_database = null;
 
       /**
-       * Contains the Session class instance.
-       *
-       * @var \Session
-       *
-       */
-      private $m_session = null;
-
-      /**
        * Constructor
        *
        * @param \MySQL     $database   contains the database instance
        *
        */
-      public function __construct($database, $session)
+      public function __construct($database)
       {
          $this->m_database = $database;
-         $this->m_session = $session;
       }
 
-      public function getTagList()
+      public function getTagList($userId)
       {
          $result = array();
          $tags = array();
@@ -62,7 +53,7 @@
 
          $this->m_database->select('name')
                             ->from('tag', 't')
-                            ->where('fk_user = ' . $this->m_session->get(SESSION_NAME_USERID))
+                            ->where('fk_user = ' . $userId)
                             ->orderBy('name', 'AC');
 
          $this->m_database->executeSelect($result);

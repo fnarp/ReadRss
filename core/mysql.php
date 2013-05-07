@@ -390,7 +390,7 @@
          if(self::DELETE === $this->type)
          {
             $query = $this->getDeleteSQL();
-
+            
             if($this->isDirty == false)
             {
                return $this->executeQuery($query, $autocleanup);
@@ -469,7 +469,7 @@
             $return = array();
 
             $query = $this->getCountSQL();
-            
+
             if($this->isDirty == false)
             {
                if($this->executeQuery($query, true, $return))
@@ -590,7 +590,7 @@
             $query .= '*';
          }
 
-         $query .= $this->getFromSql(true);
+         $query .= $this->getFromSql(true, true);
 
          $query .= $this->getWhereSql();
 
@@ -616,7 +616,7 @@
       {
          $query = 'Delete ';
 
-         $query .= $this->getFromSql();
+         $query .= $this->getFromSql(false);
 
          $query .= $this->getWhereSql();
 
@@ -716,7 +716,7 @@
 
          foreach ($this->sqlParts['from'] as $key => $from)
          {
-            $query .= $from['table'] . ($addAlias ? '' : 'AS ' . $from['alias']);
+            $query .= $from['table'] . ($addAlias ? ' AS ' . $from['alias'] : '');
 
             if($addJoins && isset($this->sqlParts['join'][$from['alias']]))
             {

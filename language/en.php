@@ -26,4 +26,5 @@
    $lang['MenuTags'] = 'Tags';
    $lang['ShowRssFeeds'] = 'Show all rss feeds.';
    $lang['SignOut'] = 'Sign out';
+   $lang['FailedReadingRssFeed'] = 'Could not read rss feed.';
 ?>

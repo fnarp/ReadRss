@@ -44,16 +44,45 @@
          $this->m_database = $database;
       }
 
-      public function setUpFeed($url)
+      public function getFeedList($userId)
       {
+         $result = array();
+         $feeds = array();
+
+         $this->m_database->cleanUp();
+
+         $this->m_database->select(array('f.title', 'f.unique_id'))
+                            ->from('user_feed', 'uf')
+                            ->join('uf', 'feed', 'f', 'uf.fk_feed = f.idfeed')
+                            ->where('uf.fk_user = ' . $userId)
+                            ->orderBy('f.title', 'AC');
+
+         $this->m_database->executeSelect($result);
+
+         if(false !== $result)
+         {
+            foreach($result as $feed)
+            {
+               $feeds[] = array('title' => $feed['title'], 'uId' => $feed['unique_id']);
+            }
+         }
+
+         return $feeds;
+      }
+
+      public function addFeed($url, $userId)
+      {
+         // TODO: sanitize external data
+
          $fk_feed = 0;
+         $fk_userFeed = 0;
          $xmlRssFeed = $this->fetchContent($url);
 
-         $xml = SimpleXmlElement($xmlRssFeed);
+         $xml = simplexml_load_string($xmlRssFeed);
 
-         if(count($xml) === 0)
+         if(false === $xml)
          {
-            Error::newError(Error::WARNING, 10, 'Could not read Feed.');
+            Error::newError(Error::WARNING, Template::getText('FailedReadingRssFeed'));
 
             return false;
          }
@@ -63,25 +92,104 @@
          $channelDescription = $xml->channel[0]->description;
 
          /*
-          * could be an empty field
+          * This field could be empty.
           */
          $channelLanguage = $xml->channel[0]->language;
 
-         $fk_feed = $this->getFeedId($channelLink);
+         $fk_feed = $this->checkExistingFeed($channelLink);
 
-         if($fk_feed === NULL)
+         if($fk_feed === null)
          {
             $this->m_database->insert('feed')
                                ->set('title', $channelTitle, 's')
                                ->set('link', $channelLink, 's')
                                ->set('description', $channelDescription, 's')
-                               ->set('language', $channelLanguage, 's');
+                               ->set('language', $channelLanguage, 's')
+                               ->set('unique_id', uniqid(), 's');
 
             $this->m_database->executeInsert($fk_feed, true);
          }
 
-         return $this->fetchFeed($url, $fk_feed, $xml);
+         // TODO: check if user already has this feed
+
+         $this->m_database->insert('user_feed')
+                            ->set('fk_feed', $fk_feed)
+                            ->set('fk_user', $userId);
+
+         $this->m_database->executeInsert($fk_userFeed, true);
+
+         if($fk_userFeed === null)
+         {
+            return false;
+         }
+
+         return true;
       }
+
+      public function deleteFeed($feedId, $userId)
+      {
+         $result = array();
+
+         $this->m_database->cleanUp();
+
+         $this->m_database->select(array('idfeed'))
+                            ->from('feed', 'f')
+                            ->where('f.unique_id = "' . $feedId . '"');
+
+         $this->m_database->executeSelect($result);
+
+         if(false !== $result)
+         {
+            $this->m_database->cleanUp();
+
+            $this->m_database->delete()
+                   ->from('user_feed', 'uf')
+                   ->where('fk_user = ' . $userId)
+                   ->where('fk_feed = ' . $result[0]['idfeed']);
+
+             return $this->m_database->executeDelete();
+         }
+
+         return false;
+      }
+
+      private function checkExistingFeed($feedUrl)
+      {
+         $result = null;
+
+         $this->m_database->cleanUp();
+
+         $this->m_database->select('idfeed')
+                            ->from('feed', 'f')
+                            ->where('link="' . $feedUrl . '"');
+
+         $this->m_database->executeSelect($result);
+
+         if($result !== false)
+         {
+            return $result[0]['idfeed'];
+         }
+
+         return null;
+      }
+
+      private function fetchContent($url)
+      {
+         $ch = curl_init();
+
+         curl_setopt($ch, CURLOPT_URL, $url);
+         //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+
+         $data = curl_exec($ch);
+
+         curl_close($ch);
+
+         return $data;
+      }
+
+      /*
 
       public function fetchFeed($url, $fk_feed=NULL, $xml=NULL)
       {
@@ -108,42 +216,12 @@
          }
       }
 
-      private function getFeedId($channelUrl)
-      {
-         $result = null;
 
-         $this->m_database->cleanUp();
 
-         $this->m_database->select('idfeed')
-                            ->from('feed', 'f')
-                            ->where('link="' . $channelUrl . '"');
 
-         $this->m_database->executeSelect($result);
-
-         if($result !== false)
-         {
-            return $result[0]['idfeed'];
-         }
-
-         return null;
-      }
-
-      private function fetchContent($url)
-      {
-         $ch = curl_init();
-
-         curl_setopt($ch, CURLOPT_URL, $url);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-
-         $data = curl_exec($ch);
-
-         curl_close($ch);
-
-         return $data;
-      }
+      */
    }
-
+/*
 
    class RssPost
    {
@@ -230,4 +308,5 @@
          $database->executeInsert($fk_post, true);
       }
    }
+ */
 ?>

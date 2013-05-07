@@ -45,6 +45,11 @@ body
    clear: both;
 }
 
+.clear_right
+{
+   clear: right;
+}
+
 h1
 {
    font-size: 1.4625em;
@@ -324,6 +329,50 @@ h1.sitetitle a:hover
 #content .post:nth-of-type(4n)
 {
    margin-right: 0;
+}
+
+#content .feed_list
+{
+   width: 74%;
+   margin: 20px 13%;
+}
+
+#content .feed_list .feed_add
+{
+   width: 80%;
+   margin:30px auto;
+}
+
+#content .feed_list .feed_add input.feed_url
+{
+   border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+   border-style: solid;
+   border-width: 1px;
+   font-family: inherit;
+   font-size: 1em;
+   padding: 0.2em;
+   width: 100%;
+}
+
+#content .feed_list .feed
+{
+   width: 98%;
+   padding:5px 1%;
+   background-color: rgb(229, 229, 229);
+   line-height: 1.1em;
+   font-size: 1em;
+   margin-bottom: 10px;
+   border-radius:4px;
+}
+
+#content .feed_list .feed .feed_options
+{
+   float: right;
+}
+
+#content .feed_list .feed .feed_options .feed_config
+{
+
 }
 
 /* 3 reading column */

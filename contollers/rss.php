@@ -13,8 +13,7 @@
 
    defined('SERVER_KEY') OR exit('No direct script access allowed');
 
-   //include_once 'models/rss.php';
-   //include_once 'views/rss.php';
+   include_once 'models/rss.php';
 
    /**
     * RSS Class
@@ -37,20 +36,20 @@
       private $m_database = null;
 
       /**
+       * Contains the Session class instance.
+       *
+       * @var \Session
+       *
+       */
+      private $m_session = null;
+
+      /**
        * Contains the RssModel class instance.
        *
        * @var \RssModel
        *
        */
       private $m_model = null;
-
-      /**
-       * Contains the RssView class instance.
-       *
-       * @var \RssView
-       *
-       */
-      private $m_view = null;
 
       /**
        * Class constructor
@@ -60,70 +59,58 @@
        * @return  void
        *
        */
-      public function __construct($database)
+      public function __construct($database, $session)
       {
          $this->m_database = $database;
-         //$this->m_model = new RssModel($this->m_database);
-         //$this->m_view = new RssView();
+         $this->m_session = $session;
+         $this->m_model = new RssModel($this->m_database);
 
          Template::registerController(__CLASS__, $this);
-      }
-
-      public function createFeed($feedUrl)
-      {
-
       }
 
       public function parseFeedArguments()
       {
          if(Security::checkGetParameter('do', false, 'add'))
          {
-            echo 'add feed';
+            $this->createFeed(Security::getPostParameter('feedurl'));
          }
 
          if(Security::checkGetParameter('do', false, 'save'))
          {
+            // TODO: save feed
             echo 'save feed';
          }
 
          if(Security::checkGetParameter('do', false, 'delete'))
          {
-            echo 'delete feed';
+            $this->deleteFeed($_GET['feed']);
          }
+      }
+
+      public function createFeed($feedUrl)
+      {
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
+
+         $this->m_model->addFeed($feedUrl, $userId);
+      }
+
+      public function deleteFeed($feedId)
+      {
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
+
+         $this->m_model->deleteFeed($feedId, $userId);
       }
 
       public function getFeedList()
       {
-         return '
-            <div class="feed_list" style="width: 50%; margin: 20px 25%;">
-               <div class="feed" style="width: 98%; padding:5px 1%; background-color: rgb(229, 229, 229); line-height: 1.1em; font-size: 1em;  margin-bottom: 10px; border-radius:4px;">
-                  Golem.de
-                  <span class="feed_options" style="float:right;">
-                     <a href="?action=feeds&amp;do=edit&amp;feed=Golem.de">edit</a>
-                     <a href="?action=feeds&amp;do=delete&amp;feed=Golem.de">delete</a>
-                  </span>
-                  <div class="clear_right" style="clear: right;"></div>
-                  <div class="feed_config">
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
 
-                  </div>
-               </div>
-               <div class="feed" style="width: 98%; padding:5px 1%; background-color: rgb(229, 229, 229); line-height: 1.1em; font-size: 1em;  margin-bottom: 10px; border-radius:4px;">
-                  Golem.de
-                  <span class="feed_options" style="float:right;">
-                     <a href="?action=feeds&amp;do=edit&amp;feed=Golem.de">edit</a>
-                     <a href="?action=feeds&amp;do=delete&amp;feed=Golem.de">delete</a>
-                  </span>
-                  <div class="clear_right" style="clear: right;"></div>
-                  <div class="feed_config">
-
-                  </div>
-               </div>
-            </div>
-            ';
+         return $this->m_model->getFeedList($userId);
       }
 
       public function updateFeeds()
       {
+         // do update
       }
    }
 ?>

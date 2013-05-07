@@ -97,9 +97,9 @@
          $this->m_session = $session;
          $this->m_user = $user;
          $this->m_view = new PageView();
-         $this->m_model = new PageModel($this->m_database, $this->m_session);
+         $this->m_model = new PageModel($this->m_database);
 
-         $this->m_rss = new RSS($this->m_database);
+         $this->m_rss = new RSS($this->m_database, $this->m_session);
 
          Template::registerController(__CLASS__, $this);
       }
@@ -145,7 +145,7 @@
 
             $this->m_rss->parseFeedArguments();
 
-            return $this->m_rss->getFeedList();
+            return $this->m_view->showFeedList($this->m_rss->getFeedList());
          }
          elseif(Security::checkGetParameter('action', false, 'search'))
          {
@@ -169,7 +169,9 @@
        */
       public function showTags()
       {
-         return $this->m_view->showTagList($this->m_model->getTagList());
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
+
+         return $this->m_view->showTagList($this->m_model->getTagList($userId));
       }
 
       /**
