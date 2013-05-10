@@ -237,7 +237,7 @@
        */
       public static function loadLanguage($language)
       {
-         include_once '/../language/'. $language . '.php';
+         include_once 'language/'. $language . '.php';
 
          self::$m_language = $lang;
          self::$m_isLoaded = true;

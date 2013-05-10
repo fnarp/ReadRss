@@ -184,6 +184,17 @@ h1.sitetitle a:hover
    border-width: 1px;
 }
 
+#sidebar .widget .tag-form input
+{
+   margin-left: 17px;
+   padding: 0.1em;
+   font-family: inherit;
+   font-size: 0.8em;
+   border-color: rgb(188, 188, 180) rgb(225, 225, 222) rgb(225, 225, 222) rgb(188, 188, 180);
+   border-style: solid;
+   border-width: 1px;
+}
+
 #main-nav
 {
    border-top: 1px solid #E2DDD6;
