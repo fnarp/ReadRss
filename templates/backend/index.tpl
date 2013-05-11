@@ -40,8 +40,8 @@
                         <ul class="tag-list">
                            {ctr;PageController;showTags;}
                         </ul>
-                        <form method="POST" action="?action=tag" class="tag-form">
-                           <input type="text" placeholder="Add a new Tag.." />
+                        <form method="POST" action="?action=addTag" class="tag-form">
+                           <input type="text" name="tag" placeholder="Add a new Tag.." />
                         </form>
                      </li>
                   </ul>

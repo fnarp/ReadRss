@@ -82,7 +82,7 @@
 
          foreach($tags as $tag)
          {
-            $list .= '<li class="tag"><a href="?show=tags&amp;tag=' . urlencode($tag) . '">' . $tag . '</a></li>';
+            $list .= '<li class="tag"><a href="?show=tags&amp;tag=' . urlencode($tag) . '">' . $tag . '</a><a href="?action=deleteTag&amp;tag=' . urlencode($tag) . '" class="delete">x</a></li>';
          }
 
          return $list;

@@ -119,6 +119,18 @@
          {
             $this->m_user->doSignIn($signInError, $mail, Security::getPostParameter('password'), true);
          }
+         
+         if(Security::checkGetParameter('action', false, 'addTag'))
+         {
+            // TODO: add $_GET santisize
+            $this->m_rss->addTag(Security::getPostParameter('tag'));
+         }
+         
+         if(Security::checkGetParameter('action', false, 'deleteTag'))
+         {
+            // TODO: add $_GET santisize
+            $this->m_rss->deleteTag(urldecode($_GET['tag']));
+         }
 
          if($this->m_user->isSignedIn())
          {
