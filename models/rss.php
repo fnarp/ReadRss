@@ -32,6 +32,18 @@
        *
        */
       private $m_database = null;
+      
+      /**
+       * Contains all relevant xml namespaces
+       * 
+       * @var array
+       */
+      private $namespaces = array
+                            (
+                               'content' => 'http://purl.org/rss/1.0/modules/content/',
+                               'wfw' => 'http://wellformedweb.org/CommentAPI/',
+                               'dc' => 'http://purl.org/dc/elements/1.1/'                               
+                            );
 
       /**
        * Constructor
@@ -251,125 +263,102 @@
 
          return $data;
       }
-
-      /*
-
-      public function fetchFeed($url, $fk_feed=NULL, $xml=NULL)
+      
+      public function updateFeed($feedId)
       {
-         if($fk_feed === 0)
+         $result = false;
+         
+         $this->m_database->cleanUp();
+         
+         $this->m_database->select('feed_url')
+                            ->from('feed', 'f')
+                            ->where('unique_id = "' . $feedId . '"');
+         
+         $this->m_database->executeSelect($result);
+
+         if($result === false)
          {
-            // TODO: what should I do here?
+            return false;
          }
+         
+         $xmlRssFeed = $this->fetchContent($result[0]['feed_url']);
+         
+         file_put_contents('data.txt', $xmlRssFeed);
 
-         if($xml !== NULL)
+         $xml = simplexml_load_string($xmlRssFeed);
+         
+         if(false === $xml)
          {
-            $xmlRssFeed = $this->fetchContent($url);
+            Error::newError(Error::WARNING, Template::getText('FailedReadingRssFeed'));
 
-            $xml = simplexml_load_string($xmlRssFeed);
-
-            if(count($xml) === 0)
-            {
-               Error::newError(Error::WARNING, 10, 'Could not read Feed.');
-            }
+            return false;
          }
-
+         
          foreach ($xml->channel->item as $item)
          {
-            (new RssPost($item))->save($this->m_database, $fk_feed);
+            $this->readRssItem($item);
          }
+         
+         return true;
       }
-
-
-
-
-      */
-   }
-/*
-
-   class RssPost
-   {
-      public $m_title = '';
-      public $m_link = '';
-      public $m_publicationDate;
-      public $m_categories = array();
-      public $m_author = '';
-      public $m_guid = '';
-      public $m_description = '';
-      public $m_content = '';
-
-      public function __construct($xmlPost)
+      
+      private function readRssItem($item)
       {
-         $this->setTitle($xmlPost->title);
-         $this->setLink($xmlPost->link);
-         $this->setPublicationDate($xmlPost->pubDate);
-         $this->setAuthor($xmlPost);
-         $this->setId($xmlPost->guid);
-         $this->setDescription($xmlPost->description);
-         $this->setContent($xmlPost);
-      }
-
-      public function setTitle($title)
-      {
-         $this->m_title = $title;
-      }
-
-      public function setLink($link)
-      {
-         $this->m_link = $link;
-      }
-
-      public function setPublicationDate($date)
-      {
-         $this->m_publicationDate = strtotime($date);
-      }
-
-      public function setAuthor($xmlPost)
-      {
-         if(!empty($xmlPost->author))
+         $rssArticle = array();
+         $rssArticle['title'] = $this->parseRssElement($item->title);
+         $rssArticle['articleLink'] = $this->parseRssElement($item->link);
+         $rssArticle['articleCommentsLink'] = $this->parseRssElement($item->comments);
+         $rssArticle['articlePublicationDate'] = date("Y-m-d H:i:s", strtotime($this->parseRssElement($item->pubDate)));
+         $rssArticle['articleDescription'] = $this->parseRssElement($item->description);
+         $rssArticle['articlePermaLink'] = $this->parseRssElement($item->guid);
+         $rssArticle['articleIsPermaLink'] = $this->parseRssElement($item->guid['isPermaLink']);
+         $rssArticle['articleAuthorMail'] = $this->parseRssElement($item->author);
+         
+         foreach($item->category as $category)
          {
-            $this->m_author = $xmlPost->author;
+            $rssArticle['categories'][] = $this->parseRssElement($category);
          }
-         else
-         {
-            $this->m_author = $xmlPost->{'dc:creator'};
-         }
-         echo $xmlPost->{'dc:creator'};
-         var_dump($xmlPost);
+         
+         // get the data held in namespaces
+         $content = $item->children($this->namespaces['content']);
+         $dc = $item->children($this->namespaces['dc']);
+         $wfw = $item->children($this->namespaces['wfw']);
+         
+         $rssArticle['articleAuthor'] = $this->parseRssElement($dc->creator);
+         $rssArticle['articleContent'] = $this->parseRssElement($content->encoded);
+         $rssArticle['articleCommentRss'] = $this->parseRssElement($wfw->commentRss);
+
+         $this->saveRssItem($rssArticle);
       }
-
-      public function setId($id)
+      
+      private function saveRssItem($article)
       {
-         $this->m_guid = $id;
+         // TODO: check if article already was saved
+         
+         $itemId = null;
+         
+         $this->m_database->cleanUp();
+         
+         $this->m_database->insert('article')
+                            ->set('title', $article['title'], 's')
+                            ->set('link', $article['articleLink'], 's')
+                            ->set('comment_link', $article['articleCommentsLink'], 's')
+                            ->set('publication', $article['articlePublicationDate'], 's')
+                            ->set('description', $article['articleDescription'], 's')
+                            ->set('guid', $article['articlePermaLink'], 's')
+                            ->set('perma_link', ($article['articleIsPermaLink'] === 'true' ? 1 : 0))
+                            ->set('author_mail', $article['articleAuthorMail'], 's')
+                            ->set('author_name', $article['articleAuthor'], 's')
+                            ->set('categories', implode(';', $article['categories']), 's')
+                            ->set('content', htmlspecialchars($article['articleContent']), 's')
+                            ->set('comment_rss', $article['articleCommentRss'], 's');
+         
+         $this->m_database->executeInsert($itemId);
       }
-
-      public function setDescription($decription)
+      
+      private function parseRssElement($string)
       {
-         $this->m_description = $decription;
-      }
-
-      public function setContent($content)
-      {
-         $this->m_content = "nothing";
-      }
-
-      public function save($database, $feed_id)
-      {
-         $fk_post = 0;
-
-         $database->cleanUp();
-
-         $database->insert('post')
-                     ->set('fk_feed', $feed_id)
-                     ->set('title', $this->m_title, 's')
-                     ->set('link', $this->m_link, 's')
-                     ->set('publication', date("Y-m-d H:i:s", $this->m_publicationDate), 's')
-                     ->set('author', $this->m_author, 's')
-                     ->set('guid', $this->m_guid, 's')
-                     ->set('description', $this->m_description, 's')
-                     ->set('content', $this->m_content, 's');
-
-         $database->executeInsert($fk_post, true);
+         return (string)trim($string);  
       }
    }
- */
 ?>

@@ -78,6 +78,7 @@
          if(Security::checkGetParameter('do', false, 'save'))
          {
             // TODO: save feed
+            // do i even need to have an edit mode?
             echo 'save feed';
          }
 
@@ -124,7 +125,14 @@
 
       public function updateFeeds()
       {
-         // do update
+         $feeds = $this->getFeedList();
+         
+         foreach($feeds as $feed)
+         {
+            $this->m_model->updateFeed($feed['uId']);
+         }
+         
+         return true;
       }
    }
 ?>
