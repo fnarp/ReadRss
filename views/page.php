@@ -78,14 +78,18 @@
 
       public function showTagList($tags)
       {
-         $list = '';
+         $tpl = new Template('templates/backend/templates/tag_item.tpl');
+         $html = '';
 
          foreach($tags as $tag)
          {
-            $list .= '<li class="tag"><a href="?show=tags&amp;tag=' . urlencode($tag) . '">' . $tag . '</a><a href="?action=deleteTag&amp;tag=' . urlencode($tag) . '" class="delete">x</a></li>';
+            $tpl->assign('id', $tag['id']);
+            $tpl->assign('name', $tag['name']);
+            
+            $html .= $tpl->getTemplate();
          }
 
-         return $list;
+         return $html;
       }
 
       public function showFeedList($items)

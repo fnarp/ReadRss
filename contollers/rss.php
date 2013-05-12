@@ -88,20 +88,6 @@
          }
       }
       
-      public function addTag($name)
-      {
-         $userId = $this->m_session->get(SESSION_NAME_USERID);
-         
-         $this->m_model->addTag($name, $userId);
-      }
-      
-      public function deleteTag($name)
-      {
-         $userId = $this->m_session->get(SESSION_NAME_USERID);
-         
-         $this->m_model->deleteTag($name, $userId);
-      }
-
       public function createFeed($feedUrl)
       {
          $userId = $this->m_session->get(SESSION_NAME_USERID);

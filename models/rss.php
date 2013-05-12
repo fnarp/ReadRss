@@ -81,48 +81,7 @@
 
          return $feeds;
       }
-      
-      public function addTag($name, $userId)
-      {
-         // TODO: sanitize external data
-         
-         $fk_tag = 0;
-         
-         if($this->checkExistingTag($name, $userId) === null)
-         {
-            $this->m_database->cleanUp();
-            
-            $this->m_database->insert('tag')
-                               ->set('name', $name, 's')
-                               ->set('fk_user', $userId);
 
-            $this->m_database->executeInsert($fk_tag, true);
-            
-            return $fk_tag;
-         }
-         
-         return false;
-      }
-      
-      public function deleteTag($name, $userId)
-      {
-         // TODO: sanitize external data
-         
-         if($this->checkExistingTag($name, $userId) !== null)
-         {
-            $this->m_database->cleanUp();
-
-            $this->m_database->delete()
-                   ->from('tag', 't')
-                   ->where('fk_user = ' . $userId)
-                   ->where('name = "' . $name . '"');
-            
-            return $this->m_database->executeDelete();
-         }
-         
-         return false;
-      }
-      
       public function addFeed($url, $userId)
       {
          // TODO: sanitize external data
@@ -222,27 +181,6 @@
          if($result !== false)
          {
             return $result[0]['idfeed'];
-         }
-
-         return null;
-      }
-      
-      private function checkExistingTag($name, $idUser)
-      {
-         $result = null;
-
-         $this->m_database->cleanUp();
-
-         $this->m_database->select('idtag')
-                            ->from('tag', 't')
-                            ->where('name = "' . $name . '"')
-                            ->where('fk_user = ' . $idUser);
-
-         $this->m_database->executeSelect($result);
-
-         if($result !== false)
-         {
-            return $result[0]['idtag'];
          }
 
          return null;

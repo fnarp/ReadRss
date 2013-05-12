@@ -112,6 +112,7 @@
       {
          $signInError = '';
          $mail = Security::getPostParameter('user');
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
 
          Security::cleanGetParameters();
 
@@ -123,13 +124,13 @@
          if(Security::checkGetParameter('action', false, 'addTag'))
          {
             // TODO: add $_GET santisize
-            $this->m_rss->addTag(Security::getPostParameter('tag'));
+            $this->m_model->addTag(Security::getPostParameter('tag'), $userId);
          }
          
          if(Security::checkGetParameter('action', false, 'deleteTag'))
          {
             // TODO: add $_GET santisize
-            $this->m_rss->deleteTag(urldecode($_GET['tag']));
+            $this->m_model->deleteTag(urldecode($_GET['tag']), $userId);
          }
 
          if($this->m_user->isSignedIn())

@@ -1,0 +1,1 @@
+<li class="tag"><a href="?show=tags&amp;tag={var;id}">{var;name}</a><a href="?action=deleteTag&amp;tag={var;id}" class="delete">x</a></li>
