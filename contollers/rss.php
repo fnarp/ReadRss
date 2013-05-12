@@ -111,7 +111,10 @@
       
       public function getUnreadArticles()
       {
-         return array(array('title'=>'Hello World','preview'=>'First article'), array('title'=>'Hello World','preview'=>'Second article'));
+         return array(
+                        array('title'=>'Geheimdienste kaufen massiv Schwachstellen und Exploits',
+                              'preview'=>'<em>"Mein Job war es, immer 25 einsatzbereite Zero-Day-Exploits auf dem USB-Stick zu haben."</em> Das hat der frühere Chef eines Unternehmens erklärt, das von Hackern Schwachstellen für die US-Regierung kaufte. Einige Firmen bieten Jahresabonnements für eine bestimmte Anzahl von Schwachstellen an.</p><p>US-Geheimdienste bieten so viel Geld für Software-Schwachstellen und Zero-Day-Exploits, dass viele talentierte Hacker ihre Entdeckungen nicht mehr den Herstellern melden, sondern sie verkaufen. Das berichtet die Nachrichtenagentur Reuters unter Berufung auf führende Geheimdienstkreise und IT-Sicherheitsunternehmen. Das US-Verteidigungsministerium und die Geheimdienste, besonders die NSA, würden so eine neue Situation in der IT-Sicherheit schaffen.</p>'), 
+                        array('title'=>'Hello World','preview'=>'<p>Second article</p>'));
       }
 
       public function updateFeeds()

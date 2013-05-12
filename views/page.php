@@ -113,7 +113,7 @@
       
       public function showArticleList($articles)
       {
-         $tpl = new Template('templates/backend/templates/article.tpl');
+         $tpl = new Template('templates/backend/templates/article_preview.tpl');
          $html = '';
 
          foreach($articles as $article)

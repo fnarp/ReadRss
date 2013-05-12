@@ -57,7 +57,7 @@
                         </a>
                      </li>
                      <li class="control">
-                        <a class="signout" title="{trl;SignOut}" href="?action=logout">
+                        <a class="signout" title="{trl;SignOut}" href="?action=signout">
                             {trl;SignOut}
                         </a>
                      </li>

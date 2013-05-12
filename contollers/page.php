@@ -112,7 +112,6 @@
       {
          $signInError = '';
          $mail = Security::getPostParameter('user');
-         $userId = $this->m_session->get(SESSION_NAME_USERID);
 
          Security::cleanGetParameters();
 
@@ -120,19 +119,11 @@
          {
             $this->m_user->doSignIn($signInError, $mail, Security::getPostParameter('password'), true);
          }
-         
-         if(Security::checkGetParameter('action', false, 'addTag'))
+         elseif(Security::checkGetParameter('action', false, 'signout'))
          {
-            // TODO: add $_GET santisize
-            $this->m_model->addTag(Security::getPostParameter('tag'), $userId);
+            $this->m_user->doSignOut();
          }
          
-         if(Security::checkGetParameter('action', false, 'deleteTag'))
-         {
-            // TODO: add $_GET santisize
-            $this->m_model->deleteTag(urldecode($_GET['tag']), $userId);
-         }
-
          if($this->m_user->isSignedIn())
          {
             $this->m_page = $this->m_view->showOverview();
@@ -145,6 +136,21 @@
 
       public function showContent()
       {
+         $userId = $this->m_session->get(SESSION_NAME_USERID);
+         
+         if(Security::checkGetParameter('action', false, 'addTag'))
+         {
+            // TODO: add $_GET santisize
+            $this->m_model->addTag(Security::getPostParameter('tag'), $userId);
+         }
+         
+         if(Security::checkGetParameter('action', false, 'deleteTag'))
+         {
+            // TODO: add $_GET santisize
+            $this->m_model->deleteTag(urldecode($_GET['tag']), $userId);
+         }
+         
+         
          if(Security::checkGetParameter('show', false))
          {
             return 'Show posts from starred, archive or specifed tag.';
@@ -163,10 +169,6 @@
          elseif(Security::checkGetParameter('action', false, 'search'))
          {
             return 'search for posts in all feeds';
-         }
-         elseif(Security::checkGetParameter('action', false, 'logout'))
-         {
-            $this->m_user->doSignOut();
          }
          elseif(Security::checkGetParameter('action', false, 'update'))
          {
