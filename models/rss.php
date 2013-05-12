@@ -309,10 +309,13 @@
          $rssArticle['articleLink'] = $this->parseRssElement($item->link);
          $rssArticle['articleCommentsLink'] = $this->parseRssElement($item->comments);
          $rssArticle['articlePublicationDate'] = date("Y-m-d H:i:s", strtotime($this->parseRssElement($item->pubDate)));
-         $rssArticle['articleDescription'] = $this->parseRssElement($item->description);
+         
+         $rssArticle['articleDescription'] = strip_tags($this->parseRssElement($item->description));
+         
          $rssArticle['articlePermaLink'] = $this->parseRssElement($item->guid);
          $rssArticle['articleIsPermaLink'] = $this->parseRssElement($item->guid['isPermaLink']);
          $rssArticle['articleAuthorMail'] = $this->parseRssElement($item->author);
+         $rssArticle['categories'] = array();
          
          foreach($item->category as $category)
          {
@@ -325,9 +328,13 @@
          $wfw = $item->children($this->namespaces['wfw']);
          
          $rssArticle['articleAuthor'] = $this->parseRssElement($dc->creator);
-         $rssArticle['articleContent'] = $this->parseRssElement($content->encoded);
+         $rssArticle['articleContent'] = strip_tags($this->parseRssElement($content->encoded));
          $rssArticle['articleCommentRss'] = $this->parseRssElement($wfw->commentRss);
+         
+         //file_put_contents($rssArticle['title'], $rssArticle['articleContent']);
 
+         var_dump($rssArticle);
+         
          $this->saveRssItem($rssArticle);
       }
       

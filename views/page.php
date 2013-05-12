@@ -106,5 +106,21 @@
 
          return $tplList->getTemplate();
       }
+      
+      public function showArticleList($articles)
+      {
+         $tpl = new Template('templates/backend/templates/article.tpl');
+         $html = '';
+
+         foreach($articles as $article)
+         {
+            $tpl->assign('title', $article['title']);
+            $tpl->assign('preview', $article['preview']);
+            
+            $html .= $tpl->getTemplate();
+         }
+
+         return $html;
+      }
    }
 ?>

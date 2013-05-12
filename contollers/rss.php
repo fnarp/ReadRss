@@ -122,6 +122,11 @@
 
          return $this->m_model->getFeedList($userId);
       }
+      
+      public function getUnreadArticles()
+      {
+         return array(array('title'=>'Hello World','preview'=>'First article'), array('title'=>'Hello World','preview'=>'Second article'));
+      }
 
       public function updateFeeds()
       {

@@ -167,9 +167,13 @@
          {
             $this->m_user->doSignOut();
          }
+         elseif(Security::checkGetParameter('action', false, 'update'))
+         {
+            $this->m_rss->updateFeeds();
+         }
          else
          {
-            return 'Show new posts.';
+            return $this->m_view->showArticleList($this->m_rss->getUnreadArticles());
          }
       }
 
