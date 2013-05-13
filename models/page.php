@@ -43,26 +43,26 @@
       {
          $this->m_database = $database;
       }
-      
+
       public function addTag($tagName, $userId)
       {
          $fk_tag = 0;
-         
+
          if($this->checkExistingTag($tagName) === null)
          {
             $this->m_database->cleanUp();
-            
+
             $this->m_database->insert('tag')
                                ->set('name', $tagName, 's');
 
             $this->m_database->executeInsert($fk_tag, true);
          }
-         
+
          if($fk_tag !== 0 &&
             $this->checkExistingUserTag($tagName, $userId) === null)
          {
             $this->m_database->cleanUp();
-            
+
             $this->m_database->insert('user_tag')
                                ->set('fk_user', $userId)
                                ->set('fk_tag', $fk_tag);
@@ -70,19 +70,19 @@
             $this->m_database->executeInsert($fk_tag, true);
          }
       }
-      
+
       public function deleteTag($tagId, $userId)
       {
          $this->m_database->cleanUp();
-         
+
          $this->m_database->delete()
                             ->from('user_tag', 'ut')
                             ->where('fk_user = ' . $userId)
                             ->where('fk_tag = ' . $tagId);
-         
-         return $this->m_database->executeDelete();
+
+         $this->m_database->executeDelete();
       }
-      
+
       public function getTagList($userId)
       {
          $result = array();
@@ -97,24 +97,52 @@
                             ->orderBy('t.name', 'AC');
 
          $this->m_database->executeSelect($result);
-         
+
          if(false !== $result)
          {
             foreach($result as $tag)
             {
-               $tags[] = array('name' => $tag['name'], 'id' => $tag['idtag']);
+               $tags[] = array('id' => $tag['idtag'], 'name' => $tag['name']);
             }
          }
 
          return $tags;
       }
-      
+
+      public function getArticleTags($articleId)
+      {
+         $result = array();
+         $tags = array();
+
+         $this->m_database->cleanUp();
+
+         $this->m_database->select()
+                            ->from('tag', 't')
+                            ->join('t', 'user_tag', 'ut', 'ut.fk_tag = t.idtag')
+                            ->join('t', 'article_state_tag', 'ast', 'ast.fk_user_tag = ut.iduser_tag')
+                            ->join('t', 'article_state', 'a_s', 'a_s.idarticle_state = ast.fk_article_state')
+                            ->where('a_s.idarticle_state = ' . $articleId)
+                            ->orderBy('t.name', 'AC');
+
+         $this->m_database->executeSelect($result);
+
+         if(false !== $result)
+         {
+            foreach($result as $tag)
+            {
+               $tags[] = array('id' => $tag['idtag'], 'name' => $tag['name']);
+            }
+         }
+
+         return $tags;
+      }
+
       private function checkExistingTag($tagName)
       {
          $result = null;
 
          $this->m_database->cleanUp();
-         
+
          $this->m_database->select('t.name')
                             ->from('tag', 't')
                             ->join('t', 'user_tag', 'ut', 'ut.fk_tag = t.idtag')
@@ -130,13 +158,13 @@
 
          return null;
       }
-      
+
       private function checkExistingUserTag($tagName, $userId)
       {
          $result = null;
 
          $this->m_database->cleanUp();
-         
+
          $this->m_database->select('t.name')
                             ->from('tag', 't')
                             ->join('t', 'user_tag', 'ut', 'ut.fk_tag = t.idtag')

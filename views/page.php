@@ -85,7 +85,7 @@
          {
             $tpl->assign('id', $tag['id']);
             $tpl->assign('name', $tag['name']);
-            
+
             $html .= $tpl->getTemplate();
          }
 
@@ -110,7 +110,7 @@
 
          return $tplList->getTemplate();
       }
-      
+
       public function showArticleList($articles)
       {
          $tpl = new Template('templates/backend/templates/article_preview.tpl');
@@ -118,9 +118,19 @@
 
          foreach($articles as $article)
          {
+            $tagHtml = '';
+
             $tpl->assign('title', $article['title']);
             $tpl->assign('preview', $article['preview']);
-            
+
+            foreach($article['tags'] as $tag)
+            {
+               // TODO: to template
+               $tagHtml .= '<a href="?show=tags&amp;tag=' . $tag['id'] . '">' . $tag['name'] . '</a>';
+            }
+
+            $tpl->assign('articleTags', $tagHtml);
+
             $html .= $tpl->getTemplate();
          }
 

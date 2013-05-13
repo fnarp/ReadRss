@@ -186,7 +186,7 @@ h1.sitetitle a:hover
 
 #sidebar .widget .tag-form input
 {
-   margin-left: 22px;
+   margin: 7px 0px 0px 22px;
    padding: 0.1em;
    font-family: inherit;
    font-size: 0.75em;
@@ -355,6 +355,17 @@ h1.sitetitle a:hover
    float: left;
    text-align: justify;
    border-bottom: 1px dotted #BCBCB4;
+}
+
+#content .post .article_categories
+{
+   font-size: 0.8em;
+   margin: 0px 7px;
+}
+
+#content .post .article_categories a
+{
+   margin-right: 5px;
 }
 
 #content .post:nth-of-type(4n+1)

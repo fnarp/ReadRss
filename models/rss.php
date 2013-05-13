@@ -32,17 +32,17 @@
        *
        */
       private $m_database = null;
-      
+
       /**
        * Contains all relevant xml namespaces
-       * 
+       *
        * @var array
        */
       private $namespaces = array
                             (
                                'content' => 'http://purl.org/rss/1.0/modules/content/',
                                'wfw' => 'http://wellformedweb.org/CommentAPI/',
-                               'dc' => 'http://purl.org/dc/elements/1.1/'                               
+                               'dc' => 'http://purl.org/dc/elements/1.1/'
                             );
 
       /**
@@ -91,7 +91,7 @@
          $xmlRssFeed = $this->fetchContent($url);
 
          $xml = simplexml_load_string($xmlRssFeed);
-         
+
          if(false === $xml)
          {
             Error::newError(Error::WARNING, Template::getText('FailedReadingRssFeed'));
@@ -166,6 +166,36 @@
          return false;
       }
 
+      public function getArticles($userId, $unreadArticles=true)
+      {
+         $result = array();
+         $articles = array();
+
+         $this->m_database->cleanUp();
+
+         $this->m_database->select()
+                            ->from('user_feed', 'uf')
+                            ->join('uf', 'article', 'a', 'uf.fk_feed = a.fk_feed')
+                            ->join('uf', 'article_state', 'a_s', 'a_s.fk_article = a.idarticle')
+                            ->where('uf.fk_user = ' . $userId)
+                            ->where('a_s.unread = ' . ($unreadArticles ? 1 : 0));
+
+         $this->m_database->executeSelect($result);
+
+         foreach ($result as $article)
+         {
+            $a = array();
+
+            $a['id'] = $article['idarticle_state'];
+            $a['title'] = $article['title'];
+            $a['preview'] = $article['description'];
+
+            $articles[] = $a;
+         }
+
+         return $articles;
+      }
+
       private function checkExistingFeed($feedUrl)
       {
          $result = null;
@@ -201,109 +231,135 @@
 
          return $data;
       }
-      
+
       public function updateFeed($feedId)
       {
          $result = false;
-         
+
          $this->m_database->cleanUp();
-         
-         $this->m_database->select('feed_url')
+
+         $this->m_database->select('idfeed, feed_url')
                             ->from('feed', 'f')
                             ->where('unique_id = "' . $feedId . '"');
-         
+
          $this->m_database->executeSelect($result);
 
          if($result === false)
          {
             return false;
          }
-         
+
          $xmlRssFeed = $this->fetchContent($result[0]['feed_url']);
-         
-         file_put_contents('data.txt', $xmlRssFeed);
 
          $xml = simplexml_load_string($xmlRssFeed);
-         
+
          if(false === $xml)
          {
             Error::newError(Error::WARNING, Template::getText('FailedReadingRssFeed'));
 
             return false;
          }
-         
+
          foreach ($xml->channel->item as $item)
          {
-            $this->readRssItem($item);
+            $this->parseRssArticle($item, $result[0]['idfeed']);
          }
-         
+
          return true;
       }
-      
-      private function readRssItem($item)
+
+      private function parseRssArticle($item, $feedId)
       {
          $rssArticle = array();
-         $rssArticle['title'] = $this->parseRssElement($item->title);
-         $rssArticle['articleLink'] = $this->parseRssElement($item->link);
-         $rssArticle['articleCommentsLink'] = $this->parseRssElement($item->comments);
-         $rssArticle['articlePublicationDate'] = date("Y-m-d H:i:s", strtotime($this->parseRssElement($item->pubDate)));
-         
-         $rssArticle['articleDescription'] = strip_tags($this->parseRssElement($item->description));
-         
-         $rssArticle['articlePermaLink'] = $this->parseRssElement($item->guid);
-         $rssArticle['articleIsPermaLink'] = $this->parseRssElement($item->guid['isPermaLink']);
-         $rssArticle['articleAuthorMail'] = $this->parseRssElement($item->author);
+
+         $rssArticle['feed'] = $feedId;
+
+         $rssArticle['title'] = $this->parseElement($item->title);
+         $rssArticle['articleLink'] = Security::url($item->link) === 1 ? $this->parseElement($item->link) : '';
+         $rssArticle['articleCommentsLink'] = Security::url($item->comments) === 1 ? $this->parseElement($item->comments) : '';
+         $rssArticle['articlePublicationDate'] = date("Y-m-d H:i:s", strtotime($this->parseElement($item->pubDate)));
+
+         $rssArticle['articleDescription'] = $this->parseHTMLArticle($this->parseElement($item->description));
+
+         $rssArticle['articlePermaLink'] = $this->parseElement($item->guid);
+         $rssArticle['articleIsPermaLink'] = $this->parseElement($item->guid['isPermaLink']);
+         $rssArticle['articleAuthorMail'] = $this->parseElement($item->author);
          $rssArticle['categories'] = array();
-         
+
          foreach($item->category as $category)
          {
-            $rssArticle['categories'][] = $this->parseRssElement($category);
+            $rssArticle['categories'][] = $this->parseElement($category);
          }
-         
+
          // get the data held in namespaces
          $content = $item->children($this->namespaces['content']);
          $dc = $item->children($this->namespaces['dc']);
          $wfw = $item->children($this->namespaces['wfw']);
-         
-         $rssArticle['articleAuthor'] = $this->parseRssElement($dc->creator);
-         $rssArticle['articleContent'] = strip_tags($this->parseRssElement($content->encoded));
-         $rssArticle['articleCommentRss'] = $this->parseRssElement($wfw->commentRss);
-         
-         //file_put_contents($rssArticle['title'], $rssArticle['articleContent']);
 
-         var_dump($rssArticle);
-         
-         $this->saveRssItem($rssArticle);
+         $rssArticle['articleAuthor'] = $this->parseElement($dc->creator);
+         $rssArticle['articleContent'] = $this->parseHTMLArticle($this->parseElement($content->encoded));
+         $rssArticle['articleCommentRss'] = $this->parseElement($wfw->commentRss);
+
+         $this->saveRssArticle($rssArticle, $feedId);
       }
-      
-      private function saveRssItem($article)
+
+      private function saveRssArticle($article, $feedId)
       {
-         // TODO: check if article already was saved
-         
          $itemId = null;
-         
-         $this->m_database->cleanUp();
-         
-         $this->m_database->insert('article')
-                            ->set('title', $article['title'], 's')
-                            ->set('link', $article['articleLink'], 's')
-                            ->set('comment_link', $article['articleCommentsLink'], 's')
-                            ->set('publication', $article['articlePublicationDate'], 's')
-                            ->set('description', $article['articleDescription'], 's')
-                            ->set('guid', $article['articlePermaLink'], 's')
-                            ->set('perma_link', ($article['articleIsPermaLink'] === 'true' ? 1 : 0))
-                            ->set('author_mail', $article['articleAuthorMail'], 's')
-                            ->set('author_name', $article['articleAuthor'], 's')
-                            ->set('categories', implode(';', $article['categories']), 's')
-                            ->set('content', htmlspecialchars($article['articleContent']), 's')
-                            ->set('comment_rss', $article['articleCommentRss'], 's');
-         
-         $this->m_database->executeInsert($itemId);
+
+         // check if article already exists:
+         if(!$this->isExistingRssArticle($article['articlePermaLink']))
+         {
+            $this->m_database->cleanUp();
+
+            $this->m_database->insert('article')
+                               ->set('fk_feed', $article['feed'])
+                               ->set('title', $article['title'], 's')
+                               ->set('link', $article['articleLink'], 's')
+                               ->set('comment_link', $article['articleCommentsLink'], 's')
+                               ->set('publication', $article['articlePublicationDate'], 's')
+                               ->set('description', $article['articleDescription'], 's')
+                               ->set('guid', $article['articlePermaLink'], 's')
+                               ->set('perma_link', ($article['articleIsPermaLink'] === 'true' ? 1 : 0))
+                               ->set('author_mail', $article['articleAuthorMail'], 's')
+                               ->set('author_name', $article['articleAuthor'], 's')
+                               ->set('categories', implode(';', $article['categories']), 's')
+                               ->set('content', $article['articleContent'], 's')
+                               ->set('comment_rss', $article['articleCommentRss'], 's');
+
+            $this->m_database->executeInsert($itemId);
+         }
       }
-      
-      private function parseRssElement($string)
+
+      private function isExistingRssArticle($guid)
       {
-         return (string)trim($string);  
+         $this->m_database->cleanUp();
+
+         $this->m_database->count('article')
+                            ->where('guid = "' . $guid . '"');
+
+         $result = $this->m_database->executeCount();
+
+         if($result >= 1)
+         {
+            return true;
+         }
+
+         return false;
+      }
+
+      private function parseElement($string)
+      {
+         return (string)trim($string);
+      }
+
+      private function parseHTMLArticle($input)
+      {
+         $input = str_replace('"', '\"', $input);
+
+         $length = strlen($input) - (strlen($input) -strpos($input, '[...]'));
+
+         return substr($input, 0, $length) . '...';
       }
    }
 ?>

@@ -123,7 +123,7 @@
          {
             $this->m_user->doSignOut();
          }
-         
+
          if($this->m_user->isSignedIn())
          {
             $this->m_page = $this->m_view->showOverview();
@@ -137,20 +137,20 @@
       public function showContent()
       {
          $userId = $this->m_session->get(SESSION_NAME_USERID);
-         
+
          if(Security::checkGetParameter('action', false, 'addTag'))
          {
             // TODO: add $_GET santisize
             $this->m_model->addTag(Security::getPostParameter('tag'), $userId);
          }
-         
+
          if(Security::checkGetParameter('action', false, 'deleteTag'))
          {
             // TODO: add $_GET santisize
             $this->m_model->deleteTag(urldecode($_GET['tag']), $userId);
          }
-         
-         
+
+
          if(Security::checkGetParameter('show', false))
          {
             return 'Show posts from starred, archive or specifed tag.';
@@ -176,7 +176,15 @@
          }
          else
          {
-            return $this->m_view->showArticleList($this->m_rss->getUnreadArticles());
+            $articles = $this->m_rss->getUnreadArticles();
+            $numberOfArticles = count($articles);
+
+            for($i = 0; $i < $numberOfArticles; $i++)
+            {
+               $articles[$i]['tags'] = $this->m_model->getArticleTags($articles[$i]['id']);
+            }
+
+            return $this->m_view->showArticleList($articles);
          }
       }
 

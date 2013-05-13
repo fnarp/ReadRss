@@ -364,7 +364,7 @@
          if(self::SELECT === $this->type)
          {
             $query = $this->getSelectSQL();
-
+            
             if($this->isDirty == false)
             {
                return $this->executeQuery($query, $autocleanup, $result);
@@ -390,7 +390,7 @@
          if(self::DELETE === $this->type)
          {
             $query = $this->getDeleteSQL();
-            
+
             if($this->isDirty == false)
             {
                return $this->executeQuery($query, $autocleanup);

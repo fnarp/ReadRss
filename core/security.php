@@ -103,7 +103,7 @@
          $length = strlen($password) * 4;
          $data = str_pad($password, $length, sha1($mail), STR_PAD_BOTH);
          $string = hash_hmac ('whirlpool', $data, SERVER_KEY, true);
-         
+
          return (crypt($string, substr($stored, 0, 30)) === $stored);
       }
 
@@ -168,6 +168,14 @@
          }
 
          return $input;
+      }
+
+      public static function url($input)
+      {
+         // pattern by diegoperini
+         $pattern = '_^(?:(?:https?)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS';
+
+         return preg_match($pattern, $input);
       }
 
       /**
@@ -237,11 +245,59 @@
          return false;
       }
 
+      /**
+       * Checks if a $_POST parameter is set.
+       *
+       * @static
+       *
+       * @param   string   $name           Contains the parameter's name.
+       * @param   bool     $emptyAllowed   Defines if the parameter is allowed to be empty.
+       * @param   string   $definedValue   Defines if the parameter neeed a defined value.
+       *
+       * @return   true    If all requirements are met.
+       * @return   false   If one requirement is not met.
+       *
+       */
+      public static function checkPostParameter($name, $emptyAllowed=true, $definedValue=NULL)
+      {
+         if(isset($_POST[$name]))
+         {
+            if(!$emptyAllowed)
+            {
+               if(empty($_POST[$name]))
+               {
+                  return false;
+               }
+            }
+
+            if($definedValue !== NULL)
+            {
+               if($definedValue !== $_POST[$name])
+               {
+                  return false;
+               }
+            }
+
+            return true;
+         }
+
+         return false;
+      }
+
       public static function getPostParameter($name)
       {
          // TODO: extend
          if(isset($_POST[$name]))
             return $_POST[$name];
+
+         return '';
+      }
+
+      public static function getGetParameter($name)
+      {
+         // TODO: extend
+         if(isset($_GET[$name]))
+            return $_GET[$name];
 
          return '';
       }
