@@ -328,6 +328,32 @@
                                ->set('comment_rss', $article['articleCommentRss'], 's');
 
             $this->m_database->executeInsert($itemId);
+            
+            $this->createArticleStates($feedId, $itemId);
+         }
+      }
+      
+      private function createArticleStates($feedId, $articleId)
+      {
+         $result = array();
+         
+         $this->m_database->cleanUp();
+         
+         $this->m_database->select('fk_user')
+                            ->from('user_feed', 'uf')
+                            ->where('fk_feed = "' . $feedId . '"');
+         
+         $this->m_database->executeSelect($result);
+         
+         foreach($result as $user)
+         {
+            $this->m_database->cleanUp();
+
+            $this->m_database->insert('article_state')
+                               ->set('fk_user', $user['fk_user'])
+                               ->set('fk_article', $articleId);
+
+            $this->m_database->executeInsert($id);
          }
       }
 
@@ -339,7 +365,7 @@
                             ->where('guid = "' . $guid . '"');
 
          $result = $this->m_database->executeCount();
-
+         
          if($result >= 1)
          {
             return true;
@@ -355,11 +381,26 @@
 
       private function parseHTMLArticle($input)
       {
+         $length = strlen($input) - (strlen($input) -strpos($input, '[...]'));
+         
+         $input = '<p>' . substr($input, 0, $length) . '...</p>';
+         
+         $doc = new DOMDocument();
+         
+         @$doc->loadHTML($input);
+         
+         $tags = $doc->getElementsByTagName('img');
+
+         foreach ($tags as $tag) {
+            $tag->setAttribute('width', '100%');
+            $tag->removeAttribute('height');
+         }
+         
+         $input = $doc->saveHTML();
+         
          $input = str_replace('"', '\"', $input);
 
-         $length = strlen($input) - (strlen($input) -strpos($input, '[...]'));
-
-         return substr($input, 0, $length) . '...';
+         return $input;
       }
    }
 ?>
