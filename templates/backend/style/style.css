@@ -327,9 +327,14 @@ h1.sitetitle a:hover
     border: 1px solid #DBDBDB;
 }
 
-#control-nav ul.controls li.control a.rss
+#control-nav ul.controls li.control a.show-feeds
 {
-   background: url("../images/menu_rss.png") no-repeat scroll center transparent;
+   background: url("../images/menu_feeds.png") no-repeat scroll center transparent;
+}
+
+#control-nav ul.controls li.control a.update-feeds
+{
+   background: url("../images/menu_update.png") no-repeat scroll center transparent;
 }
 
 #control-nav ul.controls li.control a.signout
@@ -340,8 +345,10 @@ h1.sitetitle a:hover
 #content
 {
    width: calc(95% - 190px);
+   width: -webkit-calc(95% - 190px);
    padding-top: 10px;
    padding-left: calc(190px + 3%);
+   padding-left: -webkit-calc(190px + 3%);
    margin-right: 2%;
    display: block;
 }

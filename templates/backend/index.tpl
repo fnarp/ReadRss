@@ -52,8 +52,13 @@
                <div id="control-nav">
                   <ul class="controls">
                      <li class="control">
-                        <a class="rss" title="{trl;ShowRssFeeds}" href="?action=feeds">
+                        <a class="show-feeds" title="{trl;ShowRssFeeds}" href="?action=feeds">
                            {trl;ShowRssFeeds}
+                        </a>
+                     </li>
+                     <li class="control">
+                        <a class="update-feeds" title="{trl;UpdateFeeds}" href="?action=update">
+                            {trl;UpdateFeeds}
                         </a>
                      </li>
                      <li class="control">
