@@ -323,28 +323,27 @@
                                ->set('perma_link', ($article['articleIsPermaLink'] === 'true' ? 1 : 0))
                                ->set('author_mail', $article['articleAuthorMail'], 's')
                                ->set('author_name', $article['articleAuthor'], 's')
-                               ->set('categories', implode(';', $article['categories']), 's')
                                ->set('content', $article['articleContent'], 's')
                                ->set('comment_rss', $article['articleCommentRss'], 's');
 
             $this->m_database->executeInsert($itemId);
-            
+
             $this->createArticleStates($feedId, $itemId);
          }
       }
-      
+
       private function createArticleStates($feedId, $articleId)
       {
          $result = array();
-         
+
          $this->m_database->cleanUp();
-         
+
          $this->m_database->select('fk_user')
                             ->from('user_feed', 'uf')
                             ->where('fk_feed = "' . $feedId . '"');
-         
+
          $this->m_database->executeSelect($result);
-         
+
          foreach($result as $user)
          {
             $this->m_database->cleanUp();
@@ -365,7 +364,7 @@
                             ->where('guid = "' . $guid . '"');
 
          $result = $this->m_database->executeCount();
-         
+
          if($result >= 1)
          {
             return true;
@@ -381,23 +380,45 @@
 
       private function parseHTMLArticle($input)
       {
-         $length = strlen($input) - (strlen($input) -strpos($input, '[...]'));
-         
-         $input = '<p>' . substr($input, 0, $length) . '...</p>';
-         
+         if(false !== strpos($input, '[...]'))
+         {
+            $length = strlen($input) - (strlen($input) - strpos($input, '[...]'));
+
+            $input = substr($input, 0, $length);
+         }
+
+         $input = '<p>' . $input . '</p>';
+
+         /*
          $doc = new DOMDocument();
-         
+
          @$doc->loadHTML($input);
-         
+
          $tags = $doc->getElementsByTagName('img');
 
          foreach ($tags as $tag) {
             $tag->setAttribute('width', '100%');
             $tag->removeAttribute('height');
          }
-         
+
          $input = $doc->saveHTML();
-         
+          * */
+
+         preg_match('/(<img[^>]+>)/i', $input, $matches);
+
+         foreach ($matches as $img)
+         {
+            $old = $img;
+
+            $img = preg_replace('/class=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', 'class="article_image"', $img);
+            $img = preg_replace('/height=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', '', $img);
+            $img = preg_replace('/width=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', '', $img);
+
+            $img = '<div class="article_image">' . $img . '</div>';
+
+            $input = str_replace($old, $img, $input);
+         }
+
          $input = str_replace('"', '\"', $input);
 
          return $input;

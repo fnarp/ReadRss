@@ -357,6 +357,17 @@ h1.sitetitle a:hover
    border-bottom: 1px dotted #BCBCB4;
 }
 
+#content .post .article_image
+{
+   text-align: center;
+   margin: 5px 0px;
+}
+
+#content .post .article_image img
+{
+   max-width: 100%;
+}
+
 #content .post .article_categories
 {
    font-size: 0.8em;
