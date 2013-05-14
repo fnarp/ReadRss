@@ -279,8 +279,6 @@
          $rssArticle['articleCommentsLink'] = Security::url($item->comments) === 1 ? $this->parseElement($item->comments) : '';
          $rssArticle['articlePublicationDate'] = date("Y-m-d H:i:s", strtotime($this->parseElement($item->pubDate)));
 
-         $rssArticle['articleDescription'] = $this->parseHTMLArticle($this->parseElement($item->description));
-
          $rssArticle['articlePermaLink'] = $this->parseElement($item->guid);
          $rssArticle['articleIsPermaLink'] = $this->parseElement($item->guid['isPermaLink']);
          $rssArticle['articleAuthorMail'] = $this->parseElement($item->author);
@@ -297,7 +295,19 @@
          $wfw = $item->children($this->namespaces['wfw']);
 
          $rssArticle['articleAuthor'] = $this->parseElement($dc->creator);
-         $rssArticle['articleContent'] = $this->parseHTMLArticle($this->parseElement($content->encoded));
+
+         if(strlen($this->parseElement($content->encoded)) === 0)
+         {
+            $rssArticle['articleContent'] = $this->parseHTMLArticle($this->parseElement($item->description));
+            $rssArticle['articleDescription'] = $this->parseHTMLArticle(substr($this->parseElement($item->description), 0, 300));
+         }
+         else
+         {
+            $rssArticle['articleContent'] = $this->parseHTMLArticle($this->parseElement($content->encoded));
+            $rssArticle['articleDescription'] = $this->parseHTMLArticle($this->parseElement($item->description));
+         }
+
+
          $rssArticle['articleCommentRss'] = $this->parseElement($wfw->commentRss);
 
          $this->saveRssArticle($rssArticle, $feedId);
