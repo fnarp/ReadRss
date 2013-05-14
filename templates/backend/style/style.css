@@ -440,7 +440,7 @@ h1.sitetitle a:hover
 }
 
 /* 3 reading column */
-@media screen and (max-width: 1200px)
+@media screen and (max-width: 1600px)
 {
    #content .post
    {
@@ -470,7 +470,7 @@ h1.sitetitle a:hover
 }
 
 /* 2 reading column */
-@media screen and (max-width: 1000px)
+@media screen and (max-width: 1200px)
 {
    #content .post
    {
@@ -511,7 +511,7 @@ h1.sitetitle a:hover
 }
 
 /* 1 reading column */
-@media screen and (max-width: 760px)
+@media screen and (max-width:800px)
 {
    #content .post
    {
@@ -544,40 +544,8 @@ h1.sitetitle a:hover
 
    #content .post
    {
-      width: 48.5%;
-      clear: none;
-      margin-right: 3%;
-   }
-
-   #content .post:nth-of-type(4n+1)
-   {
-      clear: none;
-      margin-right: 3%;
-   }
-
-   #content .post:nth-of-type(4n)
-   {
-      margin-right: 3%;
-   }
-
-   #content .post:nth-of-type(3n+1)
-   {
-      clear: none;
-      margin-right: 3%;
-   }
-
-   #content .post:nth-of-type(3n)
-   {
-      margin-right: 3%;
-   }
-
-   #content .post:nth-of-type(2n+1)
-   {
+      width: 100%;
       clear: left;
-   }
-
-   #content .post:nth-of-type(2n)
-   {
       margin-right: 0;
    }
 
