@@ -178,7 +178,8 @@
                             ->join('uf', 'article', 'a', 'uf.fk_feed = a.fk_feed')
                             ->join('uf', 'article_state', 'a_s', 'a_s.fk_article = a.idarticle')
                             ->where('uf.fk_user = ' . $userId)
-                            ->where('a_s.unread = ' . ($unreadArticles ? 1 : 0));
+                            ->where('a_s.unread = ' . ($unreadArticles ? 1 : 0))
+                            ->orderBy('a.publication', 'DC');
 
          $this->m_database->executeSelect($result);
 
@@ -399,32 +400,29 @@
 
          $input = '<p>' . $input . '</p>';
 
-         /*
-         $doc = new DOMDocument();
+         $input = preg_replace('(<a[^>]+>[ |\r]?<img[^>]+>[ |\r]?</a>)', '', $input);
 
-         @$doc->loadHTML($input);
+         $input = str_replace(array('<br>', '<br/>'), array('',  ''), $input);
 
-         $tags = $doc->getElementsByTagName('img');
+         preg_match_all('/(<img[^>]+>)/i', $input, $matches);
 
-         foreach ($tags as $tag) {
-            $tag->setAttribute('width', '100%');
-            $tag->removeAttribute('height');
-         }
-
-         $input = $doc->saveHTML();
-          * */
-
-         preg_match('/(<img[^>]+>)/i', $input, $matches);
-
-         foreach ($matches as $img)
+         foreach ($matches[0] as $img)
          {
             $old = $img;
 
-            $img = preg_replace('/class=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', 'class="article_image"', $img);
-            $img = preg_replace('/height=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', '', $img);
-            $img = preg_replace('/width=["]?((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["]?/', '', $img);
+            if((false !== strpos($img, 'width="1"') && false !== strpos($img, 'height="1"')) ||
+               (false !== strpos($img, 'width=\'1\'') && false !== strpos($img, 'height=\'1\'')))
+            {
+               $img = '';
+            }
+            else
+            {
+               $img = preg_replace('/class=["\']((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["\']/', 'class="article_image"', $img);
+               $img = preg_replace('/height=["\']((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["\']/', '', $img);
+               $img = preg_replace('/width=["\']((?:.(?!["]?\s+(?:\S+)=|[>"]))+.)["\']/', '', $img);
 
-            $img = '<div class="article_image">' . $img . '</div>';
+               $img = '<div class="article_image">' . $img . '</div>';
+            }
 
             $input = str_replace($old, $img, $input);
          }
