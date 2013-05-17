@@ -398,8 +398,6 @@
             $input = substr($input, 0, $length);
          }
 
-         $input = '<p>' . $input . '</p>';
-
          $input = preg_replace('(<a[^>]+>[ |\r]?<img[^>]+>[ |\r]?</a>)', '', $input);
 
          $input = str_replace(array('<br>', '<br/>'), array('',  ''), $input);
@@ -428,6 +426,15 @@
          }
 
          $input = str_replace('"', '\"', $input);
+
+         $input = trim($input);
+
+         if(!($input[strlen($input)-1] === '.' || $input[strlen($input)-1] === '!' || $input[strlen($input)-1] === '?'))
+         {
+            $input .= '...';
+         }
+
+         $input = '<p>' . $input . '</p>';
 
          return $input;
       }
