@@ -190,6 +190,7 @@
             $a['id'] = $article['idarticle_state'];
             $a['title'] = $article['title'];
             $a['preview'] = $article['description'];
+            $a['date'] = $article['publication'];
 
             $articles[] = $a;
          }
@@ -433,8 +434,6 @@
          {
             $input .= '...';
          }
-
-         $input = '<p>' . $input . '</p>';
 
          return $input;
       }

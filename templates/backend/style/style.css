@@ -87,7 +87,7 @@ h5
 
 p
 {
-   font-size: 1em;
+   font-size: 1.05em;
    line-height: 1.4em;
    color: rgb(68, 68, 68);
    margin-bottom: 0.4em;
@@ -374,6 +374,12 @@ h1.sitetitle a:hover
 #content .post .article_image img
 {
    max-width: 100%;
+}
+
+#content .post .article_date
+{
+   font-size: 0.8em;
+   margin: 0px 7px;
 }
 
 #content .post .article_categories

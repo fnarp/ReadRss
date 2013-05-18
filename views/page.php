@@ -119,8 +119,36 @@
          foreach($articles as $article)
          {
             $tagHtml = '';
-
+            $phpdate = strtotime($article['date']);
+            
+            $hours = 1;
+            $days = (1);
+            $months = 1;
+            $out = '';
+            
+            $diff = time() - $phpdate;
+            
+            $hours = $diff / 3600;
+            
+            if($hours < 24)
+            {
+               $out = ' (' . floor($hours) . ' hours ago)';
+            }
+            elseif(($days = ($hours / 24)) < 31)
+            {
+               $out = ' (' . floor($days) . ' days ago)';
+            }
+            elseif(($months = ($days / 31)) < 12)
+            {
+               $out = ' (' . floor($months) . ' days ago)';
+            }
+            else
+            {
+               $out = ' (' . floor($months) / 12 . ' days ago)';
+            }
+            
             $tpl->assign('title', $article['title']);
+            $tpl->assign('date', date('D, d. M Y H:i', $phpdate) . $out);
             $tpl->assign('preview', $article['preview']);
 
             foreach($article['tags'] as $tag)
